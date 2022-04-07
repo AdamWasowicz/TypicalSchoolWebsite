@@ -5,7 +5,10 @@ module.exports = {
   entry: './src/index.tsx',
 
   devServer: {
-    static: './src',
+    host: 'localhost',
+    historyApiFallback: true,
+    port: 3000,
+    open: true,
   },
 
   mode: 'development',
