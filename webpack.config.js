@@ -5,7 +5,6 @@ module.exports = {
   entry: './src/index.tsx',
 
   devServer: {
-    host: '0.0.0.0',
     allowedHosts: 'all',
     hot: true,
     
@@ -27,15 +26,17 @@ module.exports = {
       {
         test: /\.s[ac]ss$/i,
         use: [
-          // Creates `style` nodes from JS strings
           "style-loader",
-          // Translates CSS into CommonJS
           "css-loader",
-          // Compiles Sass to CSS
           "sass-loader",
         ],
       },
       
+      {
+        test: /\.(png|jpg|jpeg|gif)$/i,
+        type: "asset/resource",
+      },
+
     ],
   },
   resolve: {

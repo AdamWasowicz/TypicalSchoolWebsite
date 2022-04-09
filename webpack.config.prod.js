@@ -5,7 +5,7 @@ module.exports = {
   entry: './src/index.tsx',
 
   watchOptions: {
-    poll: true // Or you can set a value in milliseconds.
+    poll: true
   },
 
   devServer: {
@@ -31,15 +31,17 @@ module.exports = {
       {
         test: /\.s[ac]ss$/i,
         use: [
-          // Creates `style` nodes from JS strings
           "style-loader",
-          // Translates CSS into CommonJS
           "css-loader",
-          // Compiles Sass to CSS
           "sass-loader",
         ],
       },
-      
+
+      {
+        test: /\.(png|jpg|jpeg|gif)$/i,
+        type: "asset/resource",
+      },
+
     ],
   },
   resolve: {
