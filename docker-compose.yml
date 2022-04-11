@@ -3,11 +3,28 @@ version: '3.7'
 
 services:
   frontend:
-    container_name: frontend
-    build: .
+    container_name: TypicalSchoolWebiste_Frontend
+    build: './TypicalSchoolWebiste_Frontend'
     ports:
       - 3000:80
     volumes:
       - '.:/app'
-      - '/app/node_modules'
+      - '/app/TypicalSchoolWebiste_Frontend/node_modules'
+    depends_on:
+      - api
+
+  api:
+    container_name: TypicalSchoolWebsite_API
+    build: './TypicalSchoolWebsite_API'
+    ports:
+    - "8000:80"
+    - "8001:443"
+    environment:
+      ASPNETCORE_URLS: "https://+;http://+"
+      ASPNETCORE_HTTPS_PORT: "8001"
+      ASPNETCORE_ENVIRONMENT: Development
+    volumes:
+      - ${APPDATA}\microsoft\UserSecrets\:/root/.microsoft/usersecrets
+      - ${USERPROFILE}\.aspnet\https:/root/.aspnet/https/ 
+      
     
