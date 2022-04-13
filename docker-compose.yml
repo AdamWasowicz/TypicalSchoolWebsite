@@ -26,5 +26,22 @@ services:
     volumes:
       - ${APPDATA}\microsoft\UserSecrets\:/root/.microsoft/usersecrets
       - ${USERPROFILE}\.aspnet\https:/root/.aspnet/https/ 
+    depends_on:
+      - database
       
+  database:
+    container_name: TypicalSchoolWebsite_Database
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: AdamDev#
+      POSTGRES_PASSWORD: typical_school_website_password#
+    logging:
+          options:
+            max-size: 10m
+            max-file: "3"
+    ports:
+        - '5438:5432'
+    volumes: 
+        - ./TypicalSchoolWebsite_Database:/var/lib/postgresql/data
     
