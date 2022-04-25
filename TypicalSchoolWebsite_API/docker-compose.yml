@@ -2,28 +2,13 @@ version: '3.7'
 
 
 services:
-  frontend:
-    container_name: TypicalSchoolWebiste_Frontend
-    build: 
-      context: './TypicalSchoolWebiste_Frontend'
-      dockerfile: Dockerfile
-      args:
-        REACT_APP_API_URL: http://localhost:8000
-    ports:
-      - 3000:80
-    volumes:
-      - '.:/app'
-      - '/app/TypicalSchoolWebiste_Frontend/node_modules'
-    depends_on:
-      - api
-
   api:
     container_name: TypicalSchoolWebsite_API
     build: 'TypicalSchoolWebsite_API'
     ports:
     - "8000:80"
     environment:
-      DB_CONNECTION_STRING: "Host=TypicalSchoolWebsite_Database;Port=5432;Database=TSW_DB;Username=AdamDev;Password=TSW_PW"
+      DB_CONNECTION_STRING: "Host=postgresql_database;Port=5432;Database=TSW_DB;Username=AdamDev#;Password=typical_school_website_password#"
       ASPNETCORE_ENVIRONMENT: Development
     volumes:
       - ${APPDATA}\microsoft\UserSecrets\:/root/.microsoft/usersecrets
@@ -36,14 +21,18 @@ services:
     image: postgres
     restart: always
     environment:
-      POSTGRES_USER: "AdamDev"
-      POSTGRES_PASSWORD: "TSW_PW"
+      POSTGRES_USER: "AdamDev#"
+      POSTGRES_PASSWORD: "typical_school_website_password#"
       POSTGRES_DB: "TSW_DB"
+    logging:
+          options:
+            max-size: 10m
+            max-file: "3"
     ports:
-        - '56201:5432'
+        - '5438:5432'
     volumes: 
         - db_volume:/var/lib/postgresql/data
         
 volumes:
-    db_volume:
-        external: true
+  db_volume:
+    external: true

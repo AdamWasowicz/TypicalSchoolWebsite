@@ -9,7 +9,24 @@
 
   <ItemGroup>
 	<PackageReference Include="Microsoft.AspNetCore.App" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.16" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.16">
+	  <PrivateAssets>all</PrivateAssets>
+	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>
+	<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.10" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Authorization\" />
+    <Folder Include="Exceptions\" />
+    <Folder Include="Files\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="Middleware\" />
+    <Folder Include="Models\" />
+    <Folder Include="Validation\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>
