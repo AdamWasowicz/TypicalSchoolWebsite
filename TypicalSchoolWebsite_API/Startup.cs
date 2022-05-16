@@ -31,25 +31,36 @@ namespace TypicalSchoolWebsite_API
         public IConfiguration Configuration { get; }
 
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureDataBaseConections(IServiceCollection services)
         {
-            //DatabaseConection_START
+            //Release
             var localDbConectionString = Configuration["DB_CONNECTION_STRING"];
             var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? localDbConectionString;
-            services.AddPooledDbContextFactory<TSW_DbContext>(options =>
+
+            services.AddDbContext<TSW_DbContext>(options =>
                 options.UseNpgsql(connectionString)
             );
 
-            services.AddDbContext<TSW_DbContext>();
-            //DatabaseConection_END
+            //Dev
+            //TODO
+        }
+
+
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            ConfigureDataBaseConections(services);
 
 
 
 
+            //Automapper
+            services.AddAutoMapper(this.GetType().Assembly);
 
-
+            //Controllers
             services.AddControllers();
+
+            //Swagger
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TypicalSchoolWebsite_API", Version = "v1" });

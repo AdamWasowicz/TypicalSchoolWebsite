@@ -25,9 +25,6 @@ services:
     environment:
       DB_CONNECTION_STRING: "Host=TypicalSchoolWebsite_Database;Port=5432;Database=TSW_DB;Username=AdamDev;Password=TSW_PW"
       ASPNETCORE_ENVIRONMENT: Development
-    volumes:
-      - ${APPDATA}\microsoft\UserSecrets\:/root/.microsoft/usersecrets
-      - ${USERPROFILE}\.aspnet\https:/root/.aspnet/https/ 
     depends_on:
       - database
       
@@ -36,9 +33,9 @@ services:
     image: postgres
     restart: always
     environment:
-      POSTGRES_USER: "AdamDev"
-      POSTGRES_PASSWORD: "TSW_PW"
-      POSTGRES_DB: "TSW_DB"
+      - POSTGRES_USER=AdamDev
+      - POSTGRES_PASSWORD=TSW_PW
+      - POSTGRES_DB=TSW_DB
     ports:
         - '56201:5432'
     volumes: 
@@ -46,4 +43,4 @@ services:
         
 volumes:
     db_volume:
-        external: true
+#        external: true

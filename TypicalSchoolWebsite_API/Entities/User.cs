@@ -20,6 +20,8 @@ namespace TypicalSchoolWebsite_API.Entities
 
         public string Surname { get; set; }
 
+        public char? Gender { get; set; }
+
         public string Email { get; set; }
 
 
