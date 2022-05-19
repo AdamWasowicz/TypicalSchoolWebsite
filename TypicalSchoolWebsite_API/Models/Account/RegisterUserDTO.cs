@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TypicalSchoolWebsite_API.Models.User
+namespace TypicalSchoolWebsite_API.Models.Account
 {
-    public class CreateUserDTO
+    public class RegisterUserDTO
     {
         //Account
         public string Email { get; set; }

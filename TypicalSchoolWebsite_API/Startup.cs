@@ -1,6 +1,9 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +16,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TypicalSchoolWebsite_API.Entities;
+using TypicalSchoolWebsite_API.Interfaces;
+using TypicalSchoolWebsite_API.Models.Account;
+using TypicalSchoolWebsite_API.Other;
+using TypicalSchoolWebsite_API.Services;
+using TypicalSchoolWebsite_API.Validation.Account;
 
 namespace TypicalSchoolWebsite_API
 {
@@ -57,6 +65,17 @@ namespace TypicalSchoolWebsite_API
             //Automapper
             services.AddAutoMapper(this.GetType().Assembly);
 
+            //Validators
+            services.AddFluentValidation();
+            services.AddScoped<IValidator<RegisterUserDTO>, RegiserUserDTO_Validator>();
+
+            //Services
+            services.AddScoped<IAccountService, AccountService>();
+
+            //Other
+            services.AddScoped<Seeder>();
+            services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+
             //Controllers
             services.AddControllers();
 
@@ -68,8 +87,10 @@ namespace TypicalSchoolWebsite_API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, Seeder seeder)
         {
+            seeder.SeedRoles();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
