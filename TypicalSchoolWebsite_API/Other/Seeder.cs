@@ -20,7 +20,7 @@ namespace TypicalSchoolWebsite_API.Other
 
         public void SeedRoles()
         {
-            if (_dbContext.Database.CanConnect() & !_dbContext.Roles.Any())
+            if (_dbContext.Database.CanConnect() && !_dbContext.Roles.Any())
             {
                 var roles = new List<Role>()
                 {

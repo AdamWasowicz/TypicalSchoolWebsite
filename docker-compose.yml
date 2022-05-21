@@ -23,7 +23,13 @@ services:
     ports:
     - "8000:80"
     environment:
+      #Database
       DB_CONNECTION_STRING: "Host=TypicalSchoolWebsite_Database;Port=5432;Database=TSW_DB;Username=AdamDev;Password=TSW_PW"
+      #JWT
+      JwtKey: "DockerJwtKey"
+      JwtExpireTimeHours: "1"
+      JwtIssuer: "Adam Informatyk"
+      #Other
       ASPNETCORE_ENVIRONMENT: Development
     depends_on:
       - database

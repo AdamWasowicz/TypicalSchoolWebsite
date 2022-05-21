@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
@@ -21,6 +22,8 @@ using TypicalSchoolWebsite_API.Models.Account;
 using TypicalSchoolWebsite_API.Other;
 using TypicalSchoolWebsite_API.Services;
 using TypicalSchoolWebsite_API.Validation.Account;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace TypicalSchoolWebsite_API
 {
@@ -54,10 +57,52 @@ namespace TypicalSchoolWebsite_API
         }
 
 
+        public void AddJwtSupport(IServiceCollection services)
+        {
+            var authSettings = new AuthenticationSettings();
+
+            authSettings.JwtKey = Environment.GetEnvironmentVariable("JwtKey") != null
+                ? Environment.GetEnvironmentVariable("JwtKey")
+                : Configuration.GetValue<string>("Authentication:Default:JwtKey");
+
+            authSettings.JwtExpireTimeHours = Environment.GetEnvironmentVariable("JwtExpireTimeHours") != null
+                ? Environment.GetEnvironmentVariable("JwtExpireTimeHours")
+                : Configuration.GetValue<string>("Authentication:Default:JwtExpireTimeHours");
+
+            authSettings.JwtIssuer = Environment.GetEnvironmentVariable("JwtIssuer") != null
+                ? Environment.GetEnvironmentVariable("JwtIssuer")
+                : Configuration.GetValue<string>("Authentication:Default:JwtIssuer");
+
+            services.AddSingleton(authSettings);
+
+
+            services.AddAuthentication(option =>
+            {
+                option.DefaultAuthenticateScheme = "Bearer";
+                option.DefaultScheme = "Bearer";
+                option.DefaultChallengeScheme = "Bearer";
+            }).AddJwtBearer(cfg =>
+            {
+                cfg.RequireHttpsMetadata = false;
+                cfg.SaveToken = true;
+                cfg.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = authSettings.JwtIssuer,
+                    ValidAudience = authSettings.JwtIssuer,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authSettings.JwtKey)),
+                };
+            });
+        }
+
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Database
             ConfigureDataBaseConections(services);
+
+            //JwtAuthentication
+            AddJwtSupport(services);
 
 
 
@@ -97,6 +142,9 @@ namespace TypicalSchoolWebsite_API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TypicalSchoolWebsite_API v1"));
             }
+
+            //Use Jwt Tokens
+            app.UseAuthentication();
 
             app.UseHttpsRedirection();
 

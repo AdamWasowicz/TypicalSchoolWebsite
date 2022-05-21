@@ -9,5 +9,6 @@ namespace TypicalSchoolWebsite_API.Interfaces
     public interface IAccountService
     {
         int RegisterUser(RegisterUserDTO dto);
+        Tuple<int, string> LogIn(LogInDTO dto);
     }
 }

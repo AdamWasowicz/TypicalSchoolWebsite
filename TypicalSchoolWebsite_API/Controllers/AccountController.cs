@@ -23,7 +23,7 @@ namespace TypicalSchoolWebsite_API.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost("register")]
         public ActionResult RegisterUser([FromBody] RegisterUserDTO dto)
         {
             int resultCode = _accountService.RegisterUser(dto);
@@ -33,6 +33,18 @@ namespace TypicalSchoolWebsite_API.Controllers
             else
                 return BadRequest();
 
+        }
+
+
+        [HttpPost("login")]
+        public ActionResult LogIn([FromBody] LogInDTO dto)
+        {
+            var logInResult = _accountService.LogIn(dto);
+
+            if (logInResult.Item1 == 0)
+                return Ok(logInResult.Item2);
+            else
+                return BadRequest();
         }
     }
 }
