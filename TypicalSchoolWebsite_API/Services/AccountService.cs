@@ -11,6 +11,8 @@ using TypicalSchoolWebsite_API.Entities;
 using TypicalSchoolWebsite_API.Interfaces;
 using TypicalSchoolWebsite_API.Models.Account;
 using TypicalSchoolWebsite_API.Other;
+using TypicalSchoolWebsite_API.Exceptions;
+using TypicalSchoolWebsite_API.Middleware;
 
 namespace TypicalSchoolWebsite_API.Services
 {
@@ -99,17 +101,21 @@ namespace TypicalSchoolWebsite_API.Services
         {
             var user = _dbContext.Users.FirstOrDefault(u => u.UserName == dto.UserName);
 
-            //if (user is null)
-            //    throw new BadRequestException("Invalid username or password");
+            if (user is null)
+                throw new BadRequestException("Invalid username or password");
 
             var passwordCheckResult = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
             if (passwordCheckResult == PasswordVerificationResult.Failed)
-            {
-                //    throw new BadRequestException("Invalid username or password");
-            }
+                throw new BadRequestException("Invalid username or password");
 
+
+            //Update User's last login Date
+            user.LastLoginDate = DateTime.Now;
+            _dbContext.SaveChanges();
+
+
+            //Return Jwt token
             string JwtToken = GenerateJwt(user);
-
             var returnValue = new Tuple<int, string>(0, JwtToken);
 
             return returnValue;

@@ -24,6 +24,7 @@ using TypicalSchoolWebsite_API.Services;
 using TypicalSchoolWebsite_API.Validation.Account;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using TypicalSchoolWebsite_API.Middleware;
 
 namespace TypicalSchoolWebsite_API
 {
@@ -104,6 +105,9 @@ namespace TypicalSchoolWebsite_API
             //JwtAuthentication
             AddJwtSupport(services);
 
+            //Middleware
+            services.AddScoped<ErrorHandlingMiddleware>();
+
 
 
 
@@ -134,6 +138,7 @@ namespace TypicalSchoolWebsite_API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, Seeder seeder)
         {
+            //Use Seeder
             seeder.SeedRoles();
 
             if (env.IsDevelopment())
@@ -142,6 +147,9 @@ namespace TypicalSchoolWebsite_API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TypicalSchoolWebsite_API v1"));
             }
+
+            //Use Middleware
+            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             //Use Jwt Tokens
             app.UseAuthentication();
