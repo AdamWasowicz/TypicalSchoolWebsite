@@ -97,6 +97,80 @@ namespace TypicalSchoolWebsite_API.Services
         }
 
 
+        //For Testing Only
+        public int RegisterModerator(RegisterUserDTO dto)
+        {
+            var timestamp = DateTime.Now;
+            var basicRole = _dbContext.Roles
+                .Where(r => r.RoleName == "Moderator")
+                .FirstOrDefault();
+
+
+            var newUser = new User()
+            {
+                Email = dto.Email,
+                UserName = dto.UserName,
+
+                FirstName = dto.FirstName,
+                SecondName = dto.SecondName,
+                Surname = dto.Surname,
+
+                RegisterDate = timestamp,
+                LastAccountModificationDate = timestamp,
+
+                IsActive = true,
+                IsSuspended = false,
+
+                RoleId = basicRole.Id,
+            };
+
+            var passwordHash = _passwordHasher.HashPassword(newUser, dto.Password);
+            newUser.PasswordHash = passwordHash;
+
+            _dbContext.Users.Add(newUser);
+            _dbContext.SaveChanges();
+
+            return 0;
+        }
+
+
+        //For Testing Only
+        public int RegisterAdmin(RegisterUserDTO dto)
+        {
+            var timestamp = DateTime.Now;
+            var basicRole = _dbContext.Roles
+                .Where(r => r.RoleName == "Admin")
+                .FirstOrDefault();
+
+
+            var newUser = new User()
+            {
+                Email = dto.Email,
+                UserName = dto.UserName,
+
+                FirstName = dto.FirstName,
+                SecondName = dto.SecondName,
+                Surname = dto.Surname,
+
+                RegisterDate = timestamp,
+                LastAccountModificationDate = timestamp,
+
+                IsActive = true,
+                IsSuspended = false,
+
+                RoleId = basicRole.Id,
+            };
+
+            var passwordHash = _passwordHasher.HashPassword(newUser, dto.Password);
+            newUser.PasswordHash = passwordHash;
+
+            _dbContext.Users.Add(newUser);
+            _dbContext.SaveChanges();
+
+            return 0;
+        }
+
+
         public Tuple<int, string> LogIn(LogInDTO dto)
         {
             var user = _dbContext.Users.FirstOrDefault(u => u.UserName == dto.UserName);

@@ -11,8 +11,6 @@ namespace TypicalSchoolWebsite_API.Validation.Account
 {
     public class RegiserUserDTO_Validator : AbstractValidator<RegisterUserDTO>
     {
-        private readonly User_ValidationParams _params;
-
         public RegiserUserDTO_Validator(TSW_DbContext dbContext)
         {
             RuleFor(x => x.Email)
@@ -25,8 +23,8 @@ namespace TypicalSchoolWebsite_API.Validation.Account
 
 
             RuleFor(x => x.Password)
-                .MinimumLength(_params.PasswordMinLenght)
-                .MaximumLength(_params.PasswordMaxLength);
+                .MinimumLength(User_ValidationParams.PasswordMinLenght)
+                .MaximumLength(User_ValidationParams.PasswordMaxLength);
 
 
             RuleFor(x => x.UserName)

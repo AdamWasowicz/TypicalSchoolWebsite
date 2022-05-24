@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace TypicalSchoolWebsite_API.Validation.ValidationParams
 {
-    public class User_ValidationParams
+    static public class User_ValidationParams
     {
-        public int PasswordMinLenght = 8;
+        public const int PasswordMinLenght = 8;
 
-        public int PasswordMaxLength = 32;
+        public const int PasswordMaxLength = 32;
     }
 }

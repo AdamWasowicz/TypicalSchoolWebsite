@@ -120,6 +120,7 @@ namespace TypicalSchoolWebsite_API
 
             //Services
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IUserService, UserService>();
 
             //Other
             services.AddScoped<Seeder>();
@@ -134,6 +135,7 @@ namespace TypicalSchoolWebsite_API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TypicalSchoolWebsite_API", Version = "v1" });
             });
         }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, Seeder seeder)

@@ -33,7 +33,7 @@ namespace TypicalSchoolWebsite_API.Middleware
             catch (Exception exception)
             {
                 context.Response.StatusCode = 500;
-                await context.Response.WriteAsync("Unknown error");
+                await context.Response.WriteAsync(exception.Message);
             }
         }
     }
