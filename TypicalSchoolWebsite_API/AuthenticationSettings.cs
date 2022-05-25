@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TypicalSchoolWebsite_API.Other
+namespace TypicalSchoolWebsite_API
 {
     public class AuthenticationSettings
     {

@@ -25,6 +25,9 @@ using TypicalSchoolWebsite_API.Validation.Account;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using TypicalSchoolWebsite_API.Middleware;
+using TypicalSchoolWebsite_API.Authorization.Requirements;
+using Microsoft.AspNetCore.Authorization;
+using TypicalSchoolWebsite_API.Authorization.Handlers;
 
 namespace TypicalSchoolWebsite_API
 {
@@ -58,40 +61,58 @@ namespace TypicalSchoolWebsite_API
         }
 
 
-        public void AddJwtSupport(IServiceCollection services)
+        public void AddJwtAuthentication(IServiceCollection services)
         {
-            var authSettings = new AuthenticationSettings();
+            var authenticationSettings = new AuthenticationSettings();
+            Configuration.GetSection("Authentication:Default").Bind(authenticationSettings);
 
-            authSettings.JwtKey = Environment.GetEnvironmentVariable("JwtKey") != null
+            authenticationSettings.JwtKey = Environment.GetEnvironmentVariable("JwtKey") != null
                 ? Environment.GetEnvironmentVariable("JwtKey")
                 : Configuration.GetValue<string>("Authentication:Default:JwtKey");
 
-            authSettings.JwtExpireTimeHours = Environment.GetEnvironmentVariable("JwtExpireTimeHours") != null
+            authenticationSettings.JwtExpireTimeHours = Environment.GetEnvironmentVariable("JwtExpireTimeHours") != null
                 ? Environment.GetEnvironmentVariable("JwtExpireTimeHours")
                 : Configuration.GetValue<string>("Authentication:Default:JwtExpireTimeHours");
 
-            authSettings.JwtIssuer = Environment.GetEnvironmentVariable("JwtIssuer") != null
+            authenticationSettings.JwtIssuer = Environment.GetEnvironmentVariable("JwtIssuer") != null
                 ? Environment.GetEnvironmentVariable("JwtIssuer")
                 : Configuration.GetValue<string>("Authentication:Default:JwtIssuer");
 
-            services.AddSingleton(authSettings);
+            services.AddSingleton(authenticationSettings);
 
 
             services.AddAuthentication(option =>
             {
-                option.DefaultAuthenticateScheme = "Bearer";
-                option.DefaultScheme = "Bearer";
-                option.DefaultChallengeScheme = "Bearer";
+                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(cfg =>
             {
                 cfg.RequireHttpsMetadata = false;
                 cfg.SaveToken = true;
                 cfg.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidIssuer = authSettings.JwtIssuer,
-                    ValidAudience = authSettings.JwtIssuer,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authSettings.JwtKey)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+
+                    ValidIssuer = authenticationSettings.JwtIssuer,
+                    ValidAudience = authenticationSettings.JwtIssuer,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey)),
                 };
+            });
+        }
+
+
+        public void AddAuthorizationPolicies(IServiceCollection services)
+        {
+            services.AddAuthorization(options =>
+            {
+                //HasAccessLevelAtLeast
+                options.AddPolicy("IsWriter", builder => builder.AddRequirements(new HasAccessLevelAtLeastRequirement(4)));
+                options.AddPolicy("IsModerator", builder => builder.AddRequirements(new HasAccessLevelAtLeastRequirement(8)));
+                options.AddPolicy("IsAdmin", builder => builder.AddRequirements(new HasAccessLevelAtLeastRequirement(12)));
             });
         }
 
@@ -99,17 +120,20 @@ namespace TypicalSchoolWebsite_API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //Database
+            //Use Database
             ConfigureDataBaseConections(services);
 
-            //JwtAuthentication
-            AddJwtSupport(services);
+            //Use JWT Authentication
+            AddJwtAuthentication(services);
+
+            //Use Authorization
+            AddAuthorizationPolicies(services);
+
+            //AuthorizationHandlers
+            services.AddScoped<IAuthorizationHandler, HasAccessLevelAtLeastRequirementHandler>();
 
             //Middleware
             services.AddScoped<ErrorHandlingMiddleware>();
-
-
-
 
             //Automapper
             services.AddAutoMapper(this.GetType().Assembly);
@@ -160,6 +184,7 @@ namespace TypicalSchoolWebsite_API
 
             app.UseRouting();
 
+            //Use Authorization
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

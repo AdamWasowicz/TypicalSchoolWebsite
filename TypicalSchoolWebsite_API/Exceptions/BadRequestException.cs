@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TypicalSchoolWebsite_API.Middleware
+namespace TypicalSchoolWebsite_API.Exceptions
 {
     public class BadRequestException : Exception
     {

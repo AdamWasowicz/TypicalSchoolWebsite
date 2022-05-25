@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,7 @@ namespace TypicalSchoolWebsite_API.Controllers
 
         //For testing only
         [HttpGet("getAllUsers")]
+        [Authorize(Policy = "IsModerator")]
         public ActionResult<List<UserDTO>> GetAllUsers()
         {
             var usersDTO = _userService.GetAllUsers();

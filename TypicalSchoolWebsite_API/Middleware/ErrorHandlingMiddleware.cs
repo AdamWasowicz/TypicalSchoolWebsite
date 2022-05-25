@@ -18,7 +18,7 @@ namespace TypicalSchoolWebsite_API.Middleware
             catch (BadRequestException exception)
             {
                 context.Response.StatusCode = 400;
-                await context.Response.WriteAsync("Bad request");
+                await context.Response.WriteAsync(exception.Message);
             }
             catch (UnauthorizedAccessException exception)
             {

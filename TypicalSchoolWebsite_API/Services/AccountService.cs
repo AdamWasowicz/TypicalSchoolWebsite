@@ -37,11 +37,12 @@ namespace TypicalSchoolWebsite_API.Services
 
         public string GenerateJwt(User user)
         {
-            var claimsObject = new List<Claim>()
+            var claims = new List<Claim>()
             {
                 new Claim("UserName", user.UserName),
                 new Claim("FirstName", user.FirstName),
                 new Claim("Surname", user.Surname),
+                new Claim("UserId", user.Id.ToString()),
                 new Claim("RoleId", user.RoleId.ToString()),
             };
 
@@ -50,8 +51,8 @@ namespace TypicalSchoolWebsite_API.Services
             var expireDate = DateTime.Now.AddHours(Convert.ToDouble(_authSettings.JwtExpireTimeHours));
 
             var token = new JwtSecurityToken(
-                _authSettings.JwtIssuer,
-                claims: claimsObject,
+                issuer: _authSettings.JwtIssuer,
+                claims: claims,
                 expires: expireDate,
                 signingCredentials: cred
             );

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ namespace TypicalSchoolWebsite_API.Controllers
 
 
         [HttpPost("register")]
+        [AllowAnonymous]
         public ActionResult RegisterUser([FromBody] RegisterUserDTO dto)
         {
             int resultCode = _accountService.RegisterUser(dto);
@@ -37,6 +39,7 @@ namespace TypicalSchoolWebsite_API.Controllers
 
         //For testing only
         [HttpPost("registerModerator")]
+        [Authorize(Policy = "IsAdmin")]
         public ActionResult RegisterModerator([FromBody] RegisterUserDTO dto)
         {
             int resultCode = _accountService.RegisterModerator(dto);
@@ -50,6 +53,7 @@ namespace TypicalSchoolWebsite_API.Controllers
 
         //For testing only
         [HttpPost("registerAdmin")]
+        [Authorize(Policy = "IsAdmin")]
         public ActionResult RegisterAdmin([FromBody] RegisterUserDTO dto)
         {
             int resultCode = _accountService.RegisterAdmin(dto);
@@ -62,6 +66,7 @@ namespace TypicalSchoolWebsite_API.Controllers
 
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public ActionResult LogIn([FromBody] LogInDTO dto)
         {
             var logInResult = _accountService.LogIn(dto);
