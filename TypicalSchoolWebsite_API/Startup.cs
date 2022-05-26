@@ -145,6 +145,7 @@ namespace TypicalSchoolWebsite_API
             //Services
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IPostService, PostService>();
 
             //Other
             services.AddScoped<Seeder>();

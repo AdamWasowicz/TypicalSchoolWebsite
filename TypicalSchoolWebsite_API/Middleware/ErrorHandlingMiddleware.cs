@@ -20,6 +20,11 @@ namespace TypicalSchoolWebsite_API.Middleware
                 context.Response.StatusCode = 400;
                 await context.Response.WriteAsync(exception.Message);
             }
+            catch (BadAuthorizationExeption exception)
+            {
+                context.Response.StatusCode = 401;
+                await context.Response.WriteAsync("There was a problem with authorization");
+            }
             catch (UnauthorizedAccessException exception)
             {
                 context.Response.StatusCode = 401;
