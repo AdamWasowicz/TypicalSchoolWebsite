@@ -76,5 +76,19 @@ namespace TypicalSchoolWebsite_API.Controllers
             else
                 return BadRequest();
         }
+
+        [HttpGet("test")]
+        [AllowAnonymous]
+        public ActionResult<string> TestEnviroment()
+        {
+            var keys = Environment.GetEnvironmentVariables().Keys;
+            string content = "";
+            foreach (var key in keys)
+            {
+                content += key + ": " + Environment.GetEnvironmentVariable(key.ToString()) + "\n";
+            }
+
+            return Ok(content);
+        }
     }
 }

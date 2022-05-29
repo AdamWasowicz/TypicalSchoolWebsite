@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.8'
 
 
 services:
@@ -8,7 +8,7 @@ services:
       context: './TypicalSchoolWebiste_Frontend'
       dockerfile: Dockerfile
       args:
-        REACT_APP_API_URL: http://localhost:8000
+        REACT_APP_API_URL: http://localhost:${API_PORT_INSIDE}
     ports:
       - 3000:80
     volumes:
@@ -17,22 +17,47 @@ services:
     depends_on:
       - api
 
+
   api:
     container_name: TypicalSchoolWebsite_API
-    build: 'TypicalSchoolWebsite_API'
+    build: 
+      context: ./TypicalSchoolWebsite_API
+      dockerfile: Dockerfile
+      args:
+        ASPNETCORE_EXPOSE_PORT: ${API_PORT_INSIDE}
     ports:
-    - "8000:80"
+      - ${API_PORT_OUTSIDE}:${API_PORT_INSIDE}
     environment:
       #Database
       DB_CONNECTION_STRING: "Host=TypicalSchoolWebsite_Database;Port=5432;Database=TSW_DB;Username=AdamDev;Password=TSW_PW"
       #JWT
-      JwtKey: "DockerJwtKey"
-      JwtExpireTimeHours: "1"
+      JwtKey: "This Is Very Secret Thing"
+      JwtExpireTimeHours: "24"
       JwtIssuer: "Adam Informatyk"
       #Other
-      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:${API_PORT_INSIDE}
+      #Services
+      FILESTORAGESERVICE_URL: http://+:${FILESTORAGESERVICE_PORT_INSIDE}
     depends_on:
       - database
+      - filestorageservice
+
+
+  filestorageservice:
+    container_name: TypicalSchoolWebiste_FileStorageService
+    build: 
+      context: ./TypicalSchoolWebsite_FileStorageService
+      dockerfile: Dockerfile
+      args:
+        ASPNETCORE_EXPOSE_PORT: ${FILESTORAGESERVICE_PORT_INSIDE}
+    ports:
+      - ${FILESTORAGESERVICE_PORT_OUTSIDE}:${FILESTORAGESERVICE_PORT_INSIDE}
+    environment:
+      ASPNETCORE_URLS: "http://+:${FILESTORAGESERVICE_PORT_INSIDE}"
+      TEST: "Test"
+    volumes:
+      - TSW_fileStorageServiceVolume:/app/Storage/Images
+
       
   database:
     container_name: TypicalSchoolWebsite_Database
@@ -49,4 +74,4 @@ services:
         
 volumes:
     db_volume:
-#        external: true
+    TSW_fileStorageServiceVolume:
