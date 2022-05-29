@@ -66,17 +66,19 @@ namespace TypicalSchoolWebsite_API
             var authenticationSettings = new AuthenticationSettings();
             Configuration.GetSection("Authentication:Default").Bind(authenticationSettings);
 
-            authenticationSettings.JwtKey = Environment.GetEnvironmentVariable("JwtKey") != null
+
+            authenticationSettings.JwtKey = Environment.GetEnvironmentVariable("JwtKey") != ""
                 ? Environment.GetEnvironmentVariable("JwtKey")
                 : Configuration.GetValue<string>("Authentication:Default:JwtKey");
 
-            authenticationSettings.JwtExpireTimeHours = Environment.GetEnvironmentVariable("JwtExpireTimeHours") != null
+            authenticationSettings.JwtExpireTimeHours = Environment.GetEnvironmentVariable("JwtExpireTimeHours") != ""
                 ? Environment.GetEnvironmentVariable("JwtExpireTimeHours")
                 : Configuration.GetValue<string>("Authentication:Default:JwtExpireTimeHours");
 
-            authenticationSettings.JwtIssuer = Environment.GetEnvironmentVariable("JwtIssuer") != null
+            authenticationSettings.JwtIssuer = Environment.GetEnvironmentVariable("JwtIssuer") != ""
                 ? Environment.GetEnvironmentVariable("JwtIssuer")
                 : Configuration.GetValue<string>("Authentication:Default:JwtIssuer");
+
 
             services.AddSingleton(authenticationSettings);
 
@@ -128,6 +130,9 @@ namespace TypicalSchoolWebsite_API
 
             //Use Authorization
             AddAuthorizationPolicies(services);
+
+            //Use HTTP Client
+            services.AddHttpClient();
 
             //AuthorizationHandlers
             services.AddScoped<IAuthorizationHandler, HasAccessLevelAtLeastRequirementHandler>();

@@ -31,28 +31,30 @@ services:
       #Database
       DB_CONNECTION_STRING: "Host=TypicalSchoolWebsite_Database;Port=5432;Database=TSW_DB;Username=AdamDev;Password=TSW_PW"
       #JWT
-      JwtKey: "DockerJwtKey"
-      JwtExpireTimeHours: "1"
+      JwtKey: "This Is Very Secret Thing"
+      JwtExpireTimeHours: "24"
       JwtIssuer: "Adam Informatyk"
       #Other
-      ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:${API_PORT_INSIDE}
+      #Services
+      FILESTORAGESERVICE_URL: http://+:${FILESTORAGESERVICE_PORT_INSIDE}
     depends_on:
       - database
-      - fileStorageService
+      - filestorageservice
 
 
-  fileStorageService:
+  filestorageservice:
     container_name: TypicalSchoolWebiste_FileStorageService
     build: 
-      context: ./TypicalSchoolWebiste_FileStorageService
+      context: ./TypicalSchoolWebsite_FileStorageService
       dockerfile: Dockerfile
       args:
         ASPNETCORE_EXPOSE_PORT: ${FILESTORAGESERVICE_PORT_INSIDE}
     ports:
-      - ${FILESTORAGESERVICE_PORT_INSIDE}:${FILESTORAGESERVICE_PORT_OUTSIDE}
+      - ${FILESTORAGESERVICE_PORT_OUTSIDE}:${FILESTORAGESERVICE_PORT_INSIDE}
     environment:
       ASPNETCORE_URLS: "http://+:${FILESTORAGESERVICE_PORT_INSIDE}"
+      TEST: "Test"
     volumes:
       - TSW_fileStorageServiceVolume:/app/Storage/Images
 
@@ -71,5 +73,5 @@ services:
         - db_volume:/var/lib/postgresql/data
         
 volumes:
-    - db_volume
-    - TSW_fileStorageServiceVolume
+    db_volume:
+    TSW_fileStorageServiceVolume:
