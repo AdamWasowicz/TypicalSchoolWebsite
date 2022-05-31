@@ -7,7 +7,7 @@ namespace TypicalSchoolWebsite_API.Exceptions
 {
     public class NotFoundException : Exception
     {
-        public NotFoundException(string message) : base(message)
+        public NotFoundException(string message = "No resource found") : base(message)
         {
 
         }
