@@ -28,6 +28,8 @@ using TypicalSchoolWebsite_API.Middleware;
 using TypicalSchoolWebsite_API.Authorization.Requirements;
 using Microsoft.AspNetCore.Authorization;
 using TypicalSchoolWebsite_API.Authorization.Handlers;
+using TypicalSchoolWebsite_API.Validation.Post;
+using TypicalSchoolWebsite_API.Models.Post;
 
 namespace TypicalSchoolWebsite_API
 {
@@ -119,7 +121,6 @@ namespace TypicalSchoolWebsite_API
         }
 
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             //Use Database
@@ -145,7 +146,11 @@ namespace TypicalSchoolWebsite_API
 
             //Validators
             services.AddFluentValidation();
+            // --> Account
             services.AddScoped<IValidator<RegisterUserDTO>, RegiserUserDTO_Validator>();
+            // --> Post
+            services.AddScoped<IValidator<EditPostDTO>, EditPostDTO_Validator>();
+            services.AddScoped<IValidator<CreatePostDTO>, CreatePostDTO_Validator>();
 
             //Services
             services.AddScoped<IAccountService, AccountService>();
@@ -167,11 +172,13 @@ namespace TypicalSchoolWebsite_API
         }
 
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, Seeder seeder)
+        public void Configure(
+            IApplicationBuilder app, 
+            IWebHostEnvironment env, 
+            Seeder seeder)
         {
             //Use Seeder
-            seeder.SeedRoles();
+            seeder.Seed();
 
             if (env.IsDevelopment())
             {

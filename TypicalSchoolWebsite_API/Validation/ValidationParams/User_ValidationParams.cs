@@ -7,8 +7,8 @@ namespace TypicalSchoolWebsite_API.Validation.ValidationParams
 {
     static public class User_ValidationParams
     {
+        //Password
         public const int PasswordMinLenght = 8;
-
         public const int PasswordMaxLength = 32;
     }
 }

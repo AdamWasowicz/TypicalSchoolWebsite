@@ -18,6 +18,13 @@ namespace TypicalSchoolWebsite_API.Other
         }
 
 
+        public void Seed()
+        {
+            SeedRoles();
+            SeedPostCategories();
+        }
+
+
         public void SeedRoles()
         {
             if (_dbContext.Database.CanConnect() && !_dbContext.Roles.Any())
@@ -48,6 +55,22 @@ namespace TypicalSchoolWebsite_API.Other
 
 
                 _dbContext.Roles.AddRange(roles);
+                _dbContext.SaveChanges();
+            }
+        }
+
+
+        public void SeedPostCategories()
+        {
+            if (_dbContext.Database.CanConnect() && !_dbContext.PostCategories.Any())
+            {
+                var basePostCategory = new PostCategory()
+                {
+                    Name = "None",
+                    Description = "Default Post Category"
+                };
+
+                _dbContext.PostCategories.Add(basePostCategory);
                 _dbContext.SaveChanges();
             }
         }
