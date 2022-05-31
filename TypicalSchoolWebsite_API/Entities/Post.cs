@@ -29,5 +29,12 @@ namespace TypicalSchoolWebsite_API.Entities
         public int UserId { get; set; }
         
         public virtual User User { get; set; }
+
+
+        //PostCategory
+        [ForeignKey("PostCategory")]
+        public int? PostCategoryId { get; set; }
+
+        public virtual PostCategory PostCategory { get; set; }
     }
 }

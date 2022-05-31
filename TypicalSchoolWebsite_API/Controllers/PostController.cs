@@ -42,5 +42,38 @@ namespace TypicalSchoolWebsite_API.Controllers
 
             return Ok(operationResult);
         }
+
+
+        [HttpGet("getPostById/{id}")]
+        public ActionResult<PostDTO> GetPostById([FromRoute] int id)
+        {
+            var postDTO = _postService.GetPostById(id);
+
+            return Ok(postDTO);
+        }
+
+
+        [HttpDelete("deletePostById/{id}")]
+        [Authorize(Policy = "IsWriter")]
+        public ActionResult DeletePostById([FromRoute] int id)
+        {
+            var result = _postService.DeletePostById(id);
+
+            if (result != 0)
+                return NotFound();
+
+            return NoContent();
+        }
+
+
+        [HttpPut("editPostById")]
+        [Authorize(Policy = "IsWriter")]
+        public ActionResult<PostDTO> EditPostById([FromBody] EditPostDTO dto)
+        {
+            var postDTO = _postService.EditPostById(dto, User);
+
+            return Ok(postDTO);
+        }
+
     }
 }
