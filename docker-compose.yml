@@ -7,13 +7,15 @@ services:
     build: 
       context: './TypicalSchoolWebiste_Frontend'
       dockerfile: Dockerfile
-      args:
-        REACT_APP_API_URL: http://localhost:${API_PORT_INSIDE}
+    environment:
+      REACT_APP_API_URL: http://localhost:${API_PORT_INSIDE}
     ports:
-      - 3000:80
+      - "3000:80"
     volumes:
       - '.:/app'
       - '/app/TypicalSchoolWebiste_Frontend/node_modules'
+    networks:
+      - frontendNetwork
     depends_on:
       - api
 
@@ -26,7 +28,7 @@ services:
       args:
         ASPNETCORE_EXPOSE_PORT: ${API_PORT_INSIDE}
     ports:
-      - ${API_PORT_OUTSIDE}:${API_PORT_INSIDE}
+      - "${API_PORT_OUTSIDE}:${API_PORT_INSIDE}"
     environment:
       #Database
       DB_CONNECTION_STRING: "Host=TypicalSchoolWebsite_Database;Port=5432;Database=TSW_DB;Username=AdamDev;Password=TSW_PW"
@@ -38,6 +40,8 @@ services:
       ASPNETCORE_URLS: http://+:${API_PORT_INSIDE}
       #Services
       FILESTORAGESERVICE_URL: http://+:${FILESTORAGESERVICE_PORT_INSIDE}
+    networks:
+      - backendNetwork
     depends_on:
       - database
       - filestorageservice
@@ -51,10 +55,12 @@ services:
       args:
         ASPNETCORE_EXPOSE_PORT: ${FILESTORAGESERVICE_PORT_INSIDE}
     ports:
-      - ${FILESTORAGESERVICE_PORT_OUTSIDE}:${FILESTORAGESERVICE_PORT_INSIDE}
+      - "${FILESTORAGESERVICE_PORT_OUTSIDE}:${FILESTORAGESERVICE_PORT_INSIDE}"
     environment:
       ASPNETCORE_URLS: "http://+:${FILESTORAGESERVICE_PORT_INSIDE}"
       TEST: "Test"
+    networks:
+      - backendNetwork
     volumes:
       - TSW_fileStorageServiceVolume:/app/Storage/Images
 
@@ -68,10 +74,17 @@ services:
       - POSTGRES_PASSWORD=TSW_PW
       - POSTGRES_DB=TSW_DB
     ports:
-        - '56201:5432'
+        - "56201:5432"
+    networks:
+      - backendNetwork
     volumes: 
         - db_volume:/var/lib/postgresql/data
         
 volumes:
     db_volume:
     TSW_fileStorageServiceVolume:
+
+networks:
+    frontendNetwork:
+    backendNetwork:
+
