@@ -78,10 +78,10 @@ services:
     networks:
       - backendNetwork
     volumes: 
-        - db_volume:/var/lib/postgresql/data
+        - db-volume:/var/lib/postgresql/data
         
 volumes:
-    db_volume:
+    db-volume:
     TSW_fileStorageServiceVolume:
 
 networks:

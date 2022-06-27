@@ -24,27 +24,15 @@ spec:
   selector:
     app: tsw-api
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: tsw-database-service
-spec:
-  type: ClusterIP
-  ports:
-    - port: 30002
-      targetPort: 5432
-  selector:
-    app: tsw-database
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tsw-frontend-deployment
+  name: tsw-deployment
 spec:
   selector:
     matchLabels:
       app: tsw-frontend
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
@@ -57,23 +45,6 @@ spec:
         imagePullPolicy: Never
         ports:
         - containerPort: 80
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: tsw-api-deployment
-spec:
-  selector:
-    matchLabels:
-      app: tsw-api
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: tsw-api
-        dude: "true"
-    spec:
-      containers:
       - name: api
         image: typicalschoolwebsite_api
         imagePullPolicy: Never
@@ -115,23 +86,6 @@ spec:
               secretKeyRef:
                 name: tsw-api-secrets
                 key: FILESTORAGESERVICE_URL
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: tsw-database-deployment
-spec:
-  selector:
-    matchLabels:
-      app: tsw-database
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: tsw-database
-        dude: "true"
-    spec:
-      containers:
       - name: database
         image: postgres:14.4
         volumeMounts:
@@ -159,5 +113,3 @@ spec:
                 key: POSTGRES_DB
       volumes:
       - name: db-volume
-
-
