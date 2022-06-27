@@ -69,15 +69,15 @@ namespace TypicalSchoolWebsite_API
             Configuration.GetSection("Authentication:Default").Bind(authenticationSettings);
 
 
-            authenticationSettings.JwtKey = Environment.GetEnvironmentVariable("JwtKey") != ""
+            authenticationSettings.JwtKey = Environment.GetEnvironmentVariable("JwtKey") != "" && Environment.GetEnvironmentVariable("JwtKey") != null
                 ? Environment.GetEnvironmentVariable("JwtKey")
                 : Configuration.GetValue<string>("Authentication:Default:JwtKey");
 
-            authenticationSettings.JwtExpireTimeHours = Environment.GetEnvironmentVariable("JwtExpireTimeHours") != ""
+            authenticationSettings.JwtExpireTimeHours = Environment.GetEnvironmentVariable("JwtExpireTimeHours") != "" && Environment.GetEnvironmentVariable("JwtExpireTimeHours") != null
                 ? Environment.GetEnvironmentVariable("JwtExpireTimeHours")
                 : Configuration.GetValue<string>("Authentication:Default:JwtExpireTimeHours");
 
-            authenticationSettings.JwtIssuer = Environment.GetEnvironmentVariable("JwtIssuer") != ""
+            authenticationSettings.JwtIssuer = Environment.GetEnvironmentVariable("JwtIssuer") != "" && Environment.GetEnvironmentVariable("JwtIssuer") != null
                 ? Environment.GetEnvironmentVariable("JwtIssuer")
                 : Configuration.GetValue<string>("Authentication:Default:JwtIssuer");
 
@@ -175,11 +175,9 @@ namespace TypicalSchoolWebsite_API
         public void Configure(
             IApplicationBuilder app, 
             IWebHostEnvironment env, 
-            Seeder seeder)
+            Seeder seeder,
+            TSW_DbContext context)
         {
-            //Use Seeder
-            seeder.Seed();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -204,6 +202,9 @@ namespace TypicalSchoolWebsite_API
             {
                 endpoints.MapControllers();
             });
+
+            //Use Seeder
+            seeder.Seed();
         }
     }
 }
