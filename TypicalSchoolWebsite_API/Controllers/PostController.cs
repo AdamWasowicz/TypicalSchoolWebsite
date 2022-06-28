@@ -57,7 +57,7 @@ namespace TypicalSchoolWebsite_API.Controllers
         [Authorize(Policy = "IsWriter")]
         public ActionResult DeletePostById([FromRoute] int id)
         {
-            var result = _postService.DeletePostById(id);
+            var result = _postService.DeletePostById(id, User);
 
             if (result != 0)
                 return NotFound();

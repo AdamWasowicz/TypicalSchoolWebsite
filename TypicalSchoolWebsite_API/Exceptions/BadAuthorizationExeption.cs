@@ -7,7 +7,7 @@ namespace TypicalSchoolWebsite_API.Exceptions
 {
     public class BadAuthorizationExeption : Exception
     {
-        public BadAuthorizationExeption(string message) : base(message)
+        public BadAuthorizationExeption(string message = "Bad Authorization") : base(message)
         {
 
         }

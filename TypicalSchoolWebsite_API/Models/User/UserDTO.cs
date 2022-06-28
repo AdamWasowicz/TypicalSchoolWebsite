@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using TypicalSchoolWebsite_API.Entities;
+
 
 namespace TypicalSchoolWebsite_API.Models.User
 {
@@ -24,7 +26,10 @@ namespace TypicalSchoolWebsite_API.Models.User
         public bool IsSuspended { get; set; }
 
 
+        //Role
+        [ForeignKey("Role")]
+        public int RoleId { get; set; }
 
-        public Role Role { get; set; }
+        public virtual Entities.Role Role { get; set; }
     }
 }

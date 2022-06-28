@@ -57,9 +57,6 @@ namespace TypicalSchoolWebsite_API
             services.AddDbContext<TSW_DbContext>(options =>
                 options.UseNpgsql(connectionString)
             );
-
-            //Dev
-            //TODO
         }
 
 
@@ -118,6 +115,8 @@ namespace TypicalSchoolWebsite_API
                 options.AddPolicy("IsModerator", builder => builder.AddRequirements(new HasAccessLevelAtLeastRequirement(8)));
                 options.AddPolicy("IsAdmin", builder => builder.AddRequirements(new HasAccessLevelAtLeastRequirement(12)));
             });
+
+            services.AddScoped<IAuthorizationHandler, PostResourceOperationRequirementHandler>();
         }
 
 

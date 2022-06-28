@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using TypicalSchoolWebsite_API.Authorization.Requirements;
 using TypicalSchoolWebsite_API.Entities;
 using TypicalSchoolWebsite_API.Exceptions;
 using TypicalSchoolWebsite_API.Interfaces;
@@ -16,21 +18,30 @@ namespace TypicalSchoolWebsite_API.Services
     {
         private readonly TSW_DbContext _dbContext;
         private readonly IMapper _mapper;
-
+        private readonly IAuthorizationService _authorizationService;
 
         public PostService(
             TSW_DbContext dbContext,
-            IMapper mapper)
+            IMapper mapper,
+            IAuthorizationService authorizationService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _authorizationService = authorizationService;
         }
 
 
         public int CreatePost(CreatePostDTO dto, ClaimsPrincipal userClaims)
         {
-            if (!userClaims.Claims.Any())
-                throw new BadAuthorizationExeption("No calims found");
+            //if (!userClaims.Claims.Any())
+            //    throw new BadAuthorizationExeption("No calims found");
+
+
+            //Authorization
+            var authorizationResult = _authorizationService.AuthorizeAsync(userClaims, null,
+                new ResourceOperationRequirement(ResourceOperation.Create));
+            if (!authorizationResult.IsCompletedSuccessfully)
+                throw new BadAuthorizationExeption();
 
 
             int userId = Convert.ToInt32(userClaims.FindFirst(c => c.Type == "UserId").Value);
@@ -91,7 +102,7 @@ namespace TypicalSchoolWebsite_API.Services
         }
 
 
-        public int DeletePostById(int id)
+        public int DeletePostById(int id, ClaimsPrincipal userClaims)
         {
             var post = _dbContext.Posts
                 .Where(p => p.Id == id)
@@ -100,6 +111,13 @@ namespace TypicalSchoolWebsite_API.Services
 
             if (post == null)
                 throw new NotFoundException("No resource found");
+
+
+            //Authorization
+            var authorizationResult = _authorizationService.AuthorizeAsync(userClaims, post,
+                new ResourceOperationRequirement(ResourceOperation.Delete));
+            if (!authorizationResult.IsCompletedSuccessfully)
+                throw new BadAuthorizationExeption();
 
 
             _dbContext.Posts.Remove(post);
@@ -115,8 +133,12 @@ namespace TypicalSchoolWebsite_API.Services
                     .FirstOrDefault();
 
 
-            //Auth Here
-            //TODO
+            //Authorization
+            var authorizationResult = _authorizationService.AuthorizeAsync(userClaims, post,
+                new ResourceOperationRequirement(ResourceOperation.Update));
+            if (!authorizationResult.IsCompletedSuccessfully)
+                throw new BadAuthorizationExeption();
+
 
             //Changes
             post.IsActive = false;
