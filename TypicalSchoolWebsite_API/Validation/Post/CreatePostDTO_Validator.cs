@@ -7,6 +7,7 @@ using TypicalSchoolWebsite_API.Entities;
 using TypicalSchoolWebsite_API.Models.Post;
 using TypicalSchoolWebsite_API.Validation.ValidationParams;
 
+
 namespace TypicalSchoolWebsite_API.Validation.Post
 {
     public class CreatePostDTO_Validator : AbstractValidator<CreatePostDTO>

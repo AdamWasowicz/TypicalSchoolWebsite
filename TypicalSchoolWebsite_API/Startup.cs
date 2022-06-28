@@ -30,6 +30,8 @@ using Microsoft.AspNetCore.Authorization;
 using TypicalSchoolWebsite_API.Authorization.Handlers;
 using TypicalSchoolWebsite_API.Validation.Post;
 using TypicalSchoolWebsite_API.Models.Post;
+using TypicalSchoolWebsite_API.Models.Role;
+using TypicalSchoolWebsite_API.Validation.Role;
 
 namespace TypicalSchoolWebsite_API
 {
@@ -143,6 +145,7 @@ namespace TypicalSchoolWebsite_API
             //Automapper
             services.AddAutoMapper(this.GetType().Assembly);
 
+
             //Validators
             services.AddFluentValidation();
             // --> Account
@@ -150,15 +153,21 @@ namespace TypicalSchoolWebsite_API
             // --> Post
             services.AddScoped<IValidator<EditPostDTO>, EditPostDTO_Validator>();
             services.AddScoped<IValidator<CreatePostDTO>, CreatePostDTO_Validator>();
+            // --> Role
+            services.AddScoped<IValidator<CreateRoleDTO>, CreateRoleDTO_Validator>();
+            services.AddScoped<IValidator<EditRoleDTO>, EditRoleDTO_Validator>();
+
 
             //Services
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPostService, PostService>();
 
+
             //Other
             services.AddScoped<Seeder>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+
 
             //Controllers
             services.AddControllers();

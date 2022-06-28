@@ -13,20 +13,19 @@ namespace TypicalSchoolWebsite_API.Validation.Account
     {
         public RegiserUserDTO_Validator(TSW_DbContext dbContext)
         {
-            RuleFor(x => x.Email)
-                .NotEmpty()
-                .EmailAddress();
 
-
+            //Password
             RuleFor(x => x.Password)
                 .Equal(y => y.PasswordRepeat);
-
-
             RuleFor(x => x.Password)
-                .MinimumLength(User_ValidationParams.PasswordMinLenght)
+                .MinimumLength(User_ValidationParams.PasswordMinLength)
                 .MaximumLength(User_ValidationParams.PasswordMaxLength);
 
 
+            //UserName
+            RuleFor(x => x.UserName)
+                .MinimumLength(User_ValidationParams.UserNameMinLength)
+                .MaximumLength(User_ValidationParams.UserNameMaxLength);
             RuleFor(x => x.UserName)
                 .Custom((value, context) =>
                 {
@@ -37,6 +36,10 @@ namespace TypicalSchoolWebsite_API.Validation.Account
                 });
 
 
+            //Email
+            RuleFor(x => x.Email)
+                .NotEmpty()
+                .EmailAddress();
             RuleFor(x => x.Email)
                 .Custom((value, context) =>
                 {

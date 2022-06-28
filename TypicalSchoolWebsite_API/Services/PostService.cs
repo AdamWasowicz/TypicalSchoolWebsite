@@ -20,6 +20,7 @@ namespace TypicalSchoolWebsite_API.Services
         private readonly IMapper _mapper;
         private readonly IAuthorizationService _authorizationService;
 
+
         public PostService(
             TSW_DbContext dbContext,
             IMapper mapper,
@@ -122,6 +123,16 @@ namespace TypicalSchoolWebsite_API.Services
 
             _dbContext.Posts.Remove(post);
             _dbContext.SaveChanges();
+
+            //Check if deleted
+            var deleted = _dbContext.Posts
+                .Where(p => p.Id == id)
+                    .Any();
+
+            if (!deleted)
+                return -1;
+
+
             return 0;
         }
 
