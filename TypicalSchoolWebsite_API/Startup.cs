@@ -204,7 +204,8 @@ namespace TypicalSchoolWebsite_API
             });
 
             //Use Seeder
-            seeder.Seed();
+            if (context.Database.CanConnect())
+                seeder.Seed();
         }
     }
 }

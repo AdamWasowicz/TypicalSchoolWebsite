@@ -16,7 +16,7 @@ namespace TypicalSchoolWebsite_API.Entities
 
         public TSW_DbContext(DbContextOptions options) : base(options)
         {
-
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
 
 

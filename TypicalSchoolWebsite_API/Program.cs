@@ -21,7 +21,8 @@ namespace TypicalSchoolWebsite_API
             using (var scope = host.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<TSW_DbContext>();
-                db.Database.Migrate();
+                if (db.Database.CanConnect())
+                    db.Database.Migrate();
             }
 
             host.Run();
