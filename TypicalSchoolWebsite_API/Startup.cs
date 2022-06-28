@@ -119,6 +119,7 @@ namespace TypicalSchoolWebsite_API
             });
 
             services.AddScoped<IAuthorizationHandler, PostResourceOperationRequirementHandler>();
+            services.AddScoped<IAuthorizationHandler, RoleResourceOperationRequirementHandler>();
         }
 
 
@@ -162,6 +163,7 @@ namespace TypicalSchoolWebsite_API
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPostService, PostService>();
+            services.AddScoped<IRoleService, RoleService>();
 
 
             //Other

@@ -60,7 +60,7 @@ namespace TypicalSchoolWebsite_API.Controllers
             var result = _postService.DeletePostById(id, User);
 
             if (result != 0)
-                return NotFound();
+                return StatusCode(500);
 
             return NoContent();
         }

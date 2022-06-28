@@ -1,27 +1,27 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using System;
 using System.Linq;
+using System;
 using System.Threading.Tasks;
 using TypicalSchoolWebsite_API.Authorization.Requirements;
 using TypicalSchoolWebsite_API.Entities;
 
 namespace TypicalSchoolWebsite_API.Authorization.Handlers
 {
-    public class PostResourceOperationRequirementHandler : AuthorizationHandler<ResourceOperationRequirement, Post>
+    public class RoleResourceOperationRequirementHandler : AuthorizationHandler<ResourceOperationRequirement, Role>
     {
         private readonly TSW_DbContext _dbContext;
 
 
-        public PostResourceOperationRequirementHandler(TSW_DbContext dbContext)
+        public RoleResourceOperationRequirementHandler(TSW_DbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
 
         protected override Task HandleRequirementAsync(
-            AuthorizationHandlerContext context, 
-            ResourceOperationRequirement requirement, 
-            Post resource)
+            AuthorizationHandlerContext context,
+            ResourceOperationRequirement requirement,
+            Role resource)
         {
             //No claims
             if (context.User.Claims.Count() == 0)
@@ -44,7 +44,7 @@ namespace TypicalSchoolWebsite_API.Authorization.Handlers
             {
                 //Admin and Moderator
                 var accessLevel = _dbContext.Roles
-                    .Where(r => r.RoleName == "Moderator")
+                    .Where(r => r.RoleName == "Admin")
                         .FirstOrDefault()
                             .AccessLevel;
 
@@ -54,18 +54,9 @@ namespace TypicalSchoolWebsite_API.Authorization.Handlers
                     return Task.CompletedTask;
                 }
 
-
-                //User
-                if (resource.UserId == claimUserId)
-                {
-                    context.Succeed(requirement);
-                    return Task.CompletedTask;
-                }
-                else
-                {
-                    context.Fail();
-                    return Task.CompletedTask;
-                }
+                context.Fail();
+                return Task.CompletedTask;
+                
             }
 
 

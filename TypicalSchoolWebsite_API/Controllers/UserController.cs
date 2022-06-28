@@ -26,7 +26,7 @@ namespace TypicalSchoolWebsite_API.Controllers
 
         //For testing only
         [HttpGet("getAllUsers")]
-        [Authorize(Policy = "IsModerator")]
+        [Authorize(Policy = "IsAdmin")]
         public ActionResult<List<UserDTO>> GetAllUsers()
         {
             var usersDTO = _userService.GetAllUsers();

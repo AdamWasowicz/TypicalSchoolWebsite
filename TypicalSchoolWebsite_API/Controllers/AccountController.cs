@@ -77,6 +77,7 @@ namespace TypicalSchoolWebsite_API.Controllers
                 return BadRequest();
         }
 
+
         [HttpGet("test")]
         [AllowAnonymous]
         public ActionResult<string> TestEnviroment()
