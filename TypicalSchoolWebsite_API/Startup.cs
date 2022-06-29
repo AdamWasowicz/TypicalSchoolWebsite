@@ -32,6 +32,8 @@ using TypicalSchoolWebsite_API.Validation.Post;
 using TypicalSchoolWebsite_API.Models.Post;
 using TypicalSchoolWebsite_API.Models.Role;
 using TypicalSchoolWebsite_API.Validation.Role;
+using TypicalSchoolWebsite_API.Models.User;
+using TypicalSchoolWebsite_API.Validation.User;
 
 namespace TypicalSchoolWebsite_API
 {
@@ -120,6 +122,7 @@ namespace TypicalSchoolWebsite_API
 
             services.AddScoped<IAuthorizationHandler, PostResourceOperationRequirementHandler>();
             services.AddScoped<IAuthorizationHandler, RoleResourceOperationRequirementHandler>();
+            services.AddScoped<IAuthorizationHandler, UserResourceOperationRequirementHandler>();
         }
 
 
@@ -151,6 +154,8 @@ namespace TypicalSchoolWebsite_API
             services.AddFluentValidation();
             // --> Account
             services.AddScoped<IValidator<RegisterUserDTO>, RegiserUserDTO_Validator>();
+            // --> User
+            services.AddScoped<IValidator<EditUserDTO>, EditUserDTO_Validator>();
             // --> Post
             services.AddScoped<IValidator<EditPostDTO>, EditPostDTO_Validator>();
             services.AddScoped<IValidator<CreatePostDTO>, CreatePostDTO_Validator>();
@@ -164,6 +169,7 @@ namespace TypicalSchoolWebsite_API
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IUtilityService, UtilityService>();
 
 
             //Other

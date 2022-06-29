@@ -66,14 +66,13 @@ namespace TypicalSchoolWebsite_API.Controllers
         }
 
 
-        [HttpPut("editPostById")]
+        [HttpPut("editPost")]
         [Authorize(Policy = "IsWriter")]
-        public ActionResult<PostDTO> EditPostById([FromBody] EditPostDTO dto)
+        public ActionResult<PostDTO> EditPost([FromBody] EditPostDTO dto)
         {
             var postDTO = _postService.EditPostById(dto, User);
 
             return Ok(postDTO);
         }
-
     }
 }
