@@ -169,6 +169,7 @@ namespace TypicalSchoolWebsite_API
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IPostLogService, PostLogService>();
             services.AddScoped<IUtilityService, UtilityService>();
 
 

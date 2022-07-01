@@ -57,7 +57,7 @@ namespace TypicalSchoolWebsite_API.Services
                 CreationDate = timestamp,
                 LastEditDate = timestamp,
 
-                IsActive = false,
+                IsActive = true,
 
                 UserId = userId,
             };
@@ -121,16 +121,8 @@ namespace TypicalSchoolWebsite_API.Services
                 throw new BadAuthorizationExeption();
 
 
-            _dbContext.Posts.Remove(post);
+            post.IsActive = false;
             _dbContext.SaveChanges();
-
-            //Check if deleted
-            var deleted = _dbContext.Posts
-                .Where(p => p.Id == id)
-                    .Any();
-
-            if (!deleted)
-                return -1;
 
 
             return 0;

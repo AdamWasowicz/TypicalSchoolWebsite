@@ -71,7 +71,7 @@ namespace TypicalSchoolWebsite_API.Controllers
         }
 
 
-        [HttpPut("editRoleById")]
+        [HttpPut("editRole")]
         [Authorize(Policy = "IsAdmin")]
         public ActionResult<RoleDTO> EditRoleById([FromBody] EditRoleDTO dto)
         {

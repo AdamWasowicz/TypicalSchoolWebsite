@@ -19,5 +19,7 @@ namespace TypicalSchoolWebsite_API.Models.Post
         public DateTime LastEditDate { get; set; }
 
         public UserDTO User { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }

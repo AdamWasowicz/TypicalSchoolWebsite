@@ -42,7 +42,7 @@ namespace TypicalSchoolWebsite_API.Authorization.Handlers
             //DELETE
             if (requirement.ResourceOperation == ResourceOperation.Delete)
             {
-                //Admin and Moderator
+                //Admin
                 var accessLevel = _dbContext.Roles
                     .Where(r => r.RoleName == "Admin")
                         .FirstOrDefault()
@@ -79,7 +79,7 @@ namespace TypicalSchoolWebsite_API.Authorization.Handlers
             //Update
             if (requirement.ResourceOperation == ResourceOperation.Update)
             {
-                //Admin and Moderator
+                //Admin
                 var accessLevel = _dbContext.Roles
                     .Where(r => r.RoleName == "Admin")
                         .FirstOrDefault()

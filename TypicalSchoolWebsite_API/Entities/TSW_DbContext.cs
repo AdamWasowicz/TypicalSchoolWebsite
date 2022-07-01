@@ -12,6 +12,7 @@ namespace TypicalSchoolWebsite_API.Entities
         public DbSet<PostCategory> PostCategories { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<PostLog> PostLogs { get; set; }
 
 
         public TSW_DbContext(DbContextOptions options) : base(options)
@@ -30,6 +31,7 @@ namespace TypicalSchoolWebsite_API.Entities
                 .Property(p => p.TextContent)
                     .IsRequired();
 
+
             //PostCategory
             modelBuilder.Entity<PostCategory>()
                 .Property(p => p.Name)
@@ -37,6 +39,7 @@ namespace TypicalSchoolWebsite_API.Entities
             modelBuilder.Entity<PostCategory>()
                 .Property(p => p.Description)
                     .IsRequired();
+
 
             //Role
             modelBuilder.Entity<Role>()
@@ -55,7 +58,16 @@ namespace TypicalSchoolWebsite_API.Entities
             modelBuilder.Entity<User>()
                 .Property(p => p.Email)
                     .IsRequired();
-        }
 
+
+            //PostLog
+            modelBuilder.Entity<PostLog>()
+                .Property(p => p.UserId)
+                    .IsRequired();
+
+            modelBuilder.Entity<PostLog>()
+                .Property(p => p.PostId)
+                    .IsRequired();
+        }
     }
 }

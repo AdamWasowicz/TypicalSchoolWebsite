@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TypicalSchoolWebsite_API.Entities;
+using TypicalSchoolWebsite_API.Exceptions;
+using TypicalSchoolWebsite_API.Interfaces;
+using TypicalSchoolWebsite_API.Models.Account;
 
 namespace TypicalSchoolWebsite_API.Other
 {
@@ -10,11 +13,13 @@ namespace TypicalSchoolWebsite_API.Other
     public class Seeder
     {
         private readonly TSW_DbContext _dbContext;
+        private readonly IAccountService _accountService;
 
 
-        public Seeder(TSW_DbContext dbContext)
+        public Seeder(TSW_DbContext dbContext, IAccountService accountService)
         {
             _dbContext = dbContext;
+            _accountService = accountService;
         }
 
 
@@ -22,6 +27,7 @@ namespace TypicalSchoolWebsite_API.Other
         {
             SeedRoles();
             SeedPostCategories();
+            SeedAdminUser();
         }
 
 
@@ -71,6 +77,45 @@ namespace TypicalSchoolWebsite_API.Other
                 };
 
                 _dbContext.PostCategories.Add(basePostCategory);
+                _dbContext.SaveChanges();
+            }
+        }
+
+
+        public void SeedAdminUser()
+        {
+            if (_dbContext.Database.CanConnect() && !_dbContext.Users.Any())
+            {
+                var registerUserDTO = new RegisterUserDTO()
+                {
+                    Email = "TSW_admin@tsw.net",
+                    UserName = "SuperAdmin",
+                    Password = "SuperAdminPassword0#",
+                    PasswordRepeat = "SuperAdminPassword0#"
+                };
+
+                _accountService.RegisterUser(registerUserDTO);
+
+
+                var adminUser = _dbContext.Users
+                    .Where(u => u.UserName == "SuperAdmin")
+                        .FirstOrDefault();
+
+
+                if (adminUser == null)
+                    throw new NotFoundException();
+
+
+                var adminRole = _dbContext.Roles
+                    .Where(r => r.RoleName == "Admin")
+                        .FirstOrDefault();
+
+                if (adminRole == null)
+                    throw new NotFoundException();
+
+
+
+                adminUser.RoleId = adminRole.Id;
                 _dbContext.SaveChanges();
             }
         }
