@@ -11,6 +11,7 @@ using TypicalSchoolWebsite_API.Entities;
 using TypicalSchoolWebsite_API.Exceptions;
 using TypicalSchoolWebsite_API.Interfaces;
 using TypicalSchoolWebsite_API.Models.Post;
+using TypicalSchoolWebsite_API.Models.PostLog;
 
 namespace TypicalSchoolWebsite_API.Services
 {
@@ -19,25 +20,24 @@ namespace TypicalSchoolWebsite_API.Services
         private readonly TSW_DbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IPostLogService _postLogService;
 
 
         public PostService(
             TSW_DbContext dbContext,
             IMapper mapper,
-            IAuthorizationService authorizationService)
+            IAuthorizationService authorizationService,
+            IPostLogService postLogService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _authorizationService = authorizationService;
+            _postLogService = postLogService;
         }
 
 
         public int CreatePost(CreatePostDTO dto, ClaimsPrincipal userClaims)
         {
-            //if (!userClaims.Claims.Any())
-            //    throw new BadAuthorizationExeption("No calims found");
-
-
             //Authorization
             var authorizationResult = _authorizationService.AuthorizeAsync(userClaims, null,
                 new ResourceOperationRequirement(ResourceOperation.Create));
@@ -110,6 +110,13 @@ namespace TypicalSchoolWebsite_API.Services
                     .FirstOrDefault();
 
 
+            //PostLog
+            var createPostLogDTO = new CreatePostLogDTO();
+            createPostLogDTO.PreviousState = _mapper.Map<PostDTO>(post);
+            createPostLogDTO.Operation = "DELETE";
+            createPostLogDTO.UserId = Convert.ToInt32(userClaims.FindFirst(c => c.Type == "UserId").Value);
+
+
             if (post == null)
                 throw new NotFoundException("No resource found");
 
@@ -125,6 +132,11 @@ namespace TypicalSchoolWebsite_API.Services
             _dbContext.SaveChanges();
 
 
+            //CurrentState
+            createPostLogDTO.CurrentState = _mapper.Map<PostDTO>(post);
+            _postLogService.CreatePostLog(createPostLogDTO);
+
+
             return 0;
         }
 
@@ -134,6 +146,13 @@ namespace TypicalSchoolWebsite_API.Services
             var post = _dbContext.Posts
                 .Where(p => p.Id == dto.Id)
                     .FirstOrDefault();
+
+
+            //PostLog
+            var createPostLogDTO = new CreatePostLogDTO();
+            createPostLogDTO.PreviousState = _mapper.Map<PostDTO>(post);
+            createPostLogDTO.Operation = "EDIT";
+            createPostLogDTO.UserId = Convert.ToInt32(userClaims.FindFirst(c => c.Type == "UserId").Value);
 
 
             //Authorization
@@ -160,9 +179,12 @@ namespace TypicalSchoolWebsite_API.Services
 
             //Other
             post.LastEditDate = DateTime.Now;
-
-
             _dbContext.SaveChanges();
+
+
+            //CurrentState
+            createPostLogDTO.CurrentState = _mapper.Map<PostDTO>(post);
+            _postLogService.CreatePostLog(createPostLogDTO);
 
 
             var postDTO = _mapper.Map<PostDTO>(post);
