@@ -1,0 +1,139 @@
+@import '../../constants/styleConstants.scss';
+
+
+//Constants
+$fade-in-animation-duration: 0.3s;
+$fade-out-animation-duration: 0.3s;
+
+
+//Keyframes
+@keyframes fadeOutFromRightToLeft {
+    0% {
+        margin-left: -100%;
+    }
+
+    1% {
+        margin-left: -100%;
+    }
+
+    100% {
+        margin-left: 0%;
+    }
+}
+
+@keyframes fadeInFromLeftToRight {
+    0% {
+        margin-left: 0%;
+    }
+
+    1% {
+        margin-left: 0%;
+    }
+    100% {
+        margin-left: -100%;
+    }
+}
+
+@keyframes rotateFrom0degTo90deg {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(90deg);
+    }
+}
+
+@keyframes rotateFrom90degTo0deg {
+    from {
+        transform: rotate(90deg);
+    }
+
+    to {
+        transform: rotate(0deg);
+    }
+}
+
+
+
+
+.NavBar {
+    //Color
+    background-color: $primary-dark;
+
+
+    //barsContainer
+    > .barsContainer {
+        //Object
+        display: block;
+
+        //Object position
+        margin-left: auto;
+        margin-right: auto;
+
+        //Object szie
+        width: 100px;
+
+        //Content position
+        text-align: center;
+        padding: 5px;
+
+        //Font
+        font-size: 40px;
+
+        //Colors
+        color: white;
+
+
+        transform: rotate(0deg);
+        animation-name: rotateFrom90degTo0deg;
+        animation-duration: 0.3s;
+        
+        //Hover
+        &:hover {
+            //Color
+            color: $secondary-dark;
+
+
+            //Animation
+            transform: rotate(90deg);
+            animation-name: rotateFrom0degTo90deg;
+            animation-duration: 0.3s;
+        }
+    }
+
+
+    //NavBarElementContainer
+    .NavBarElementContainer {
+        //Object
+        position: absolute;
+        display: block;
+
+
+        //Object position
+        margin-left: 0%;
+        z-index: 2;
+
+        //Object size
+        width: 100%;
+        
+        //Animation
+        animation-name: fadeOutFromRightToLeft;
+        animation-duration: $fade-out-animation-duration;
+        animation-timing-function: linear;
+
+        
+        //Hidden
+        &-hidden {
+            @extend .NavBarElementContainer;
+
+            //Object position
+            margin-left: -100%;
+
+            //Animation
+            animation-name: fadeInFromLeftToRight;
+            animation-duration: $fade-in-animation-duration;
+            animation-timing-function: linear;
+        }
+    }
+}

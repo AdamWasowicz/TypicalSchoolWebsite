@@ -1,0 +1,61 @@
+@import '../../../constants/styleConstants.scss';
+
+
+.NavBarElement {
+    //Object
+    box-sizing: border-box;
+
+    //Color
+    background-color: $primary-light;
+    color: white;
+
+    //Object size
+    height: 50px;
+
+    //Border
+    border-bottom: 2px solid $primary-base;
+
+
+    //Hover
+    &:hover {
+        color: $secondary-dark;
+    }
+
+    
+    //NavBarElementContainer
+    > .NavBarElementContainer {
+        //Object
+        display: flex;
+        box-sizing: border-box;
+
+        //Object size
+        width: 60%;
+        
+        //Content position
+        flex-direction: row;
+        flex-wrap: nowrap;
+        padding: 10px;
+
+
+        //NavBarElementIcon
+        > .NavBarElementIcon {
+            //Object position
+            margin-right: 40px;
+
+            //Object size
+            width: 20%;
+
+            //Object content
+            text-align: center;
+            font-size: 30px;
+        }
+
+
+        //NavBarElementText
+        .NavBarElementText {
+            //Object content
+            font-size: 25px;
+        } 
+    }
+
+}
