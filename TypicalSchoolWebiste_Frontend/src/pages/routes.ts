@@ -2,21 +2,29 @@ import { IRoute } from '../types/route';
 
 //Routes
 import Home from "./Home";
+import Error404 from './Error404';
+
 import ReduxTest from './ReduxTest';
 
 
 export const routes: IRoute[] = [
     {
         route: '/',
-        module: Home,
-        roles: ['ROLE_USER', 'ROLE_ADMIN', 'NOT_LOGGED'],
+        module: Home
     },
 
     {
         route: '/reduxTest',
-        module: ReduxTest,
-        roles: ['ROLE_USER', 'ROLE_ADMIN', 'NOT_LOGGED'],
+        module: ReduxTest
     },
 
-    
+    {
+        route: '/*',
+        module: Error404
+    },
+
+    {
+        route: '404',
+        module: Error404
+    }
 ];

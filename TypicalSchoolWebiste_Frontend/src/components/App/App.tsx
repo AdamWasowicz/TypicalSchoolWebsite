@@ -15,6 +15,7 @@ import { IRoute } from '../../types/route';
 //Other
 import { routes } from '../../pages/routes';
 import navBarDestinations from '../../constants/NavBarDestinations';
+import Footer from '../Footer';
 
 
 const App: React.FunctionComponent = () => {
@@ -22,6 +23,7 @@ const App: React.FunctionComponent = () => {
         <div className='App'>
             <Router>
                 <NavBar elements={navBarDestinations}/>
+
                 <Routes>
                     {
                         routes.map((route: IRoute, i: number) => (
@@ -32,9 +34,9 @@ const App: React.FunctionComponent = () => {
                             />
                         ))
                     }
-                    <Route key="route-error-404" path="/*" element={<Error404/>} />
-                    <Route key="route-error-404" path="404" element={<Error404/>} />
                 </Routes>
+
+                <Footer/>
             </Router>
         </div>
     );

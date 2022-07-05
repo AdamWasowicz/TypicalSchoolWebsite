@@ -1,0 +1,28 @@
+@import '../../constants/styleConstants.scss';
+
+
+
+
+.Footer {
+    //Object
+    display: flex;
+
+    //Object size
+    width: 100%;
+    height: 30px;
+
+
+    //Color
+    background-color: $primary-dark;
+
+    //Content position
+    justify-content: center;
+    align-items: center;
+
+
+    //FooterContentContainer
+    .FooterContentContainer {
+        //Color
+        color: white
+    }
+}

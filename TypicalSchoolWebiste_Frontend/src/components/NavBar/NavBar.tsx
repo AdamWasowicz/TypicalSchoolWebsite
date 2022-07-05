@@ -1,20 +1,18 @@
 import React from 'react';
-import { useState } from 'react';
-
+import { useNavBar } from './utils';
 
 //Style
 import './style.scss';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 
 //Interfaces
 import INavBarElement from '../../assets/Interfaces/INavBarElement';
 
+
 //Components
 import NavBarElement from './NavBarElement';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
-import { useNavBar } from './utils';
-
 
 
 const NavBar: React.FunctionComponent<{elements: Array<INavBarElement>}> = ({elements}) => {
@@ -28,7 +26,8 @@ const NavBar: React.FunctionComponent<{elements: Array<INavBarElement>}> = ({ele
                 <FontAwesomeIcon icon={faBars} onClick={handleOnClick} />
             </div>
             
-            <div className={!navBarVisibility ? 'NavBarElementContainer' : 'NavBarElementContainer-hidden'}>
+            <div 
+                className={navBarVisibility ? 'NavBarElementContainer' : 'NavBarElementContainer-hidden'}>
                 {
                     elements.map((element, index) => {
                         return <NavBarElement key={index} element={element}/>

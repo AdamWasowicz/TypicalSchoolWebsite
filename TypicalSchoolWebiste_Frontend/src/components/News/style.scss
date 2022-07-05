@@ -1,0 +1,38 @@
+@import '../../constants/styleConstants.scss';
+
+
+
+
+.News {
+    //Content position
+    padding: 5px;
+
+
+    //NewsHealder
+    > .NewsHeader {
+        //Text
+        font-size: 30px;
+        font-weight: bold;
+        text-align: center;
+
+        //Object position
+        margin-bottom: 5px;
+    }
+
+
+    //NewsElementContainer
+    > * ~ .NewsElementContainer {
+        //Object
+        display: flex;
+
+        //Object postition
+        margin-left: auto;
+        margin-right: auto;
+
+        //Object content
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        
+    }
+}

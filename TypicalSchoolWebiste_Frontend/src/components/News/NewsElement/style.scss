@@ -1,0 +1,104 @@
+@import '../../../constants/styleConstants.scss';
+
+
+
+
+.NewsElement {
+    //Object
+    display: flex;
+
+    //Text
+    overflow: hidden;
+
+    //Object position
+    margin: 10px;
+
+    //Object size
+    max-width: 600px;
+    width: 100%;
+    height: 110px;
+
+    //Color
+    background-color: $primary-light;
+
+    //Content position
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+    //Border
+    border: 1px solid black;
+
+
+    //Left Part
+    > .LeftPart {
+        //Object size
+        max-width: 100px;
+        height: 100%;
+
+        //Color
+        background-color: $primary-dark;
+
+
+        //NewsImage
+        > .NewsImage {
+            //Object size
+            width: 100%;
+            height: 100%;
+
+            //Object
+            object-fit: cover;
+
+            //Other
+            overflow: hidden;
+        }
+    }
+
+
+    //Right part
+    > * ~ .RightPart {
+        //Object size
+        width: calc(100% - 100px);
+
+        //Content position
+        padding: 5px;
+
+
+        //Title
+        > .Title {
+            //Text
+            font-weight: bold;
+
+            //Object position
+            margin-bottom: 10px;
+        }
+
+        //TextContent
+        > * ~ .TextContent {
+           //Object content
+           //!!!Zrobić w react by samo skaracało tekst i dodawło kropki
+           overflow: hidden;
+
+        }
+    }
+
+
+    //Date
+    > * ~ .Date {
+        //Other
+        writing-mode: vertical-rl;
+
+        //Content position
+        padding: 2px;
+        text-align: center;
+
+        //Object size
+        height: 100%;
+
+        //Color
+        background-color: $primary-dark;
+        color: white;
+
+        //Text
+        letter-spacing: 2px;
+    }
+}
