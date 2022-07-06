@@ -39,7 +39,7 @@ services:
       #Other
       ASPNETCORE_URLS: http://+:${API_PORT_INSIDE}
       #Services
-      FILESTORAGESERVICE_URL: http://+:${FILESTORAGESERVICE_PORT_INSIDE}
+      FILESTORAGESERVICE_URL: TypicalSchoolWebiste_FileStorageService:${FILESTORAGESERVICE_PORT_INSIDE}
     networks:
       - backendNetwork
     depends_on:

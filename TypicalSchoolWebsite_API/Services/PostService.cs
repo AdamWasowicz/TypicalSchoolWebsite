@@ -75,9 +75,6 @@ namespace TypicalSchoolWebsite_API.Services
 
             var fileServiceResult = await _imageFileService.CreateImage(fileServiceDTO);
 
-            int a = 1;
-
-
 
             _dbContext.Posts.Add(newPost);
             _dbContext.SaveChanges();

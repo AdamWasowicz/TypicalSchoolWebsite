@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -41,24 +42,28 @@ namespace TypicalSchoolWebsite_API.Services
         public async Task<string> CreateImage(CreateImageFileDTO dto)
         {
             var url = Environment.GetEnvironmentVariable("FILESTORAGESERVICE_URL");
-            var route = "/fileStorage/createImageFile";
-            var destination = url + route;
-            url = "http://localhost:8001";
+            if (url == null)
+                url = "http://localhost:8001";
+            var route = "fileStorage/createImageFile";
             _httpClient.BaseAddress = new Uri(url);
+            var file = dto.File;
+
+            byte[] data;
+            using (var br = new BinaryReader(file.OpenReadStream()))
+                data = br.ReadBytes((int)file.OpenReadStream().Length);
+
+            ByteArrayContent bytes = new ByteArrayContent(data);
 
 
-            //fileStreamContent
-            var fileStreamContent = new StreamContent(dto.File.OpenReadStream());
-            fileStreamContent.Headers.ContentType = new MediaTypeHeaderValue("image/jpg");
+            MultipartFormDataContent multiContent = new MultipartFormDataContent();
+
+            multiContent.Add(bytes, "file", file.FileName);
 
 
-            //Content
-            var multipartContent = new MultipartFormDataContent();
-            multipartContent.Add(fileStreamContent, name: "File", fileName: dto.File.Name);
 
 
             //Send
-            var httpResponse = await _httpClient.PostAsync(route, multipartContent);
+            var httpResponse = await _httpClient.PostAsync(route, multiContent);
 
             if (httpResponse.IsSuccessStatusCode)
             {

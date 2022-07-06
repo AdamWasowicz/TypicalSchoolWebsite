@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -18,9 +19,9 @@ namespace TypicalSchoolWebsite_FileStorageService.Controllers
         }
 
         [HttpPost("createImageFile")]
-        public ActionResult<string> TestFileUpload([FromBody] CreateImageFileDTO dto)
+        public ActionResult<string> TestFileUpload([FromForm] IFormFile file)
         {
-            return Ok("a");
+            return Ok(Request.Form.Files[0].FileName);
         }
 
         [HttpGet("testConnection")]
