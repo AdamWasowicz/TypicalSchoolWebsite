@@ -13,6 +13,7 @@ namespace TypicalSchoolWebsite_API.Entities
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<PostLog> PostLogs { get; set; }
+        public DbSet<ImageFile> ImageFiles { get; set; }
 
 
         public TSW_DbContext(DbContextOptions options) : base(options)
@@ -67,6 +68,12 @@ namespace TypicalSchoolWebsite_API.Entities
 
             modelBuilder.Entity<PostLog>()
                 .Property(p => p.PostId)
+                    .IsRequired();
+
+
+            //ImageFile
+            modelBuilder.Entity<ImageFile>()
+                .Property(p => p.UserId)
                     .IsRequired();
         }
     }

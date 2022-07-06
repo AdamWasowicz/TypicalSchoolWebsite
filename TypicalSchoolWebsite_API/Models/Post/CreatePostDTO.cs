@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace TypicalSchoolWebsite_API.Models.Post
 {
@@ -10,5 +12,7 @@ namespace TypicalSchoolWebsite_API.Models.Post
         public  string Title { get; set; }
 
         public string TextContent { get; set; }
+
+        public IFormFile PostImage { get; set; }
     }
 }

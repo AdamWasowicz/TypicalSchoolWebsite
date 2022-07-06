@@ -36,5 +36,12 @@ namespace TypicalSchoolWebsite_API.Entities
         public int? PostCategoryId { get; set; }
 
         public virtual PostCategory PostCategory { get; set; }
+
+
+        //ImageFile
+        [ForeignKey("ImageFile")]
+        public int ImageFileId { get; set; }
+
+        public virtual ImageFile ImageFile { get; set; }
     }
 }

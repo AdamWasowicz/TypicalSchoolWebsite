@@ -9,7 +9,7 @@ namespace TypicalSchoolWebsite_API.Interfaces
 {
     public interface IPostService
     {
-        public int CreatePost(CreatePostDTO dto, ClaimsPrincipal userClaims);
+        public Task<int> CreatePost(CreatePostDTO dto, ClaimsPrincipal userClaims);
         public List<PostDTO> GetAllPosts();
         public PostDTO GetPostById(int id);
         public int DeletePostById(int id, ClaimsPrincipal userClaims);

@@ -10,6 +10,7 @@ using TypicalSchoolWebsite_API.Authorization.Requirements;
 using TypicalSchoolWebsite_API.Entities;
 using TypicalSchoolWebsite_API.Exceptions;
 using TypicalSchoolWebsite_API.Interfaces;
+using TypicalSchoolWebsite_API.Models.ImageFile;
 using TypicalSchoolWebsite_API.Models.Post;
 using TypicalSchoolWebsite_API.Models.PostLog;
 
@@ -21,22 +22,25 @@ namespace TypicalSchoolWebsite_API.Services
         private readonly IMapper _mapper;
         private readonly IAuthorizationService _authorizationService;
         private readonly IPostLogService _postLogService;
+        private readonly IImageFileService _imageFileService;
 
 
         public PostService(
             TSW_DbContext dbContext,
             IMapper mapper,
             IAuthorizationService authorizationService,
-            IPostLogService postLogService)
+            IPostLogService postLogService,
+            IImageFileService imageFileService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _authorizationService = authorizationService;
             _postLogService = postLogService;
+            _imageFileService = imageFileService;
         }
 
 
-        public int CreatePost(CreatePostDTO dto, ClaimsPrincipal userClaims)
+        public async Task<int> CreatePost(CreatePostDTO dto, ClaimsPrincipal userClaims)
         {
             //Authorization
             var authorizationResult = _authorizationService.AuthorizeAsync(userClaims, null,
@@ -61,6 +65,18 @@ namespace TypicalSchoolWebsite_API.Services
 
                 UserId = userId,
             };
+
+
+            //FileService
+            var fileServiceDTO = new CreateImageFileDTO();
+            fileServiceDTO.File = dto.PostImage;
+            fileServiceDTO.FileName = dto.PostImage.FileName;
+            fileServiceDTO.FileExtenstion = dto.PostImage.FileName.Split('.')[1];
+
+            var fileServiceResult = await _imageFileService.CreateImage(fileServiceDTO);
+
+            int a = 1;
+
 
 
             _dbContext.Posts.Add(newPost);

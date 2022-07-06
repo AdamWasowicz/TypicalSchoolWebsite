@@ -27,9 +27,9 @@ namespace TypicalSchoolWebsite_API.Controllers
 
         [HttpPost("createPost")]
         [Authorize(Policy = "IsWriter")]
-        public ActionResult CreatePost([FromBody] CreatePostDTO dto)
+        public async Task<ActionResult> CreatePost([FromForm] CreatePostDTO dto)
         {
-            var operationResult = _postService.CreatePost(dto, User);
+            var operationResult =  await _postService.CreatePost(dto, User);
 
             return Created(operationResult.ToString(), null);
         }

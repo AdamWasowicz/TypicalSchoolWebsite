@@ -171,6 +171,7 @@ namespace TypicalSchoolWebsite_API
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IPostLogService, PostLogService>();
             services.AddScoped<IUtilityService, UtilityService>();
+            services.AddScoped<IImageFileService, ImageFileService>();
 
 
             //Other
@@ -186,6 +187,17 @@ namespace TypicalSchoolWebsite_API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TypicalSchoolWebsite_API", Version = "v1" });
             });
+
+            //CORS
+            services.AddCors(options =>
+            {
+                options.AddPolicy("Dev", builder =>
+                {
+                    builder.AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .WithOrigins("*");
+                });
+            });
         }
 
 
@@ -195,6 +207,9 @@ namespace TypicalSchoolWebsite_API
             Seeder seeder,
             TSW_DbContext context)
         {
+            //UseCORS
+            app.UseCors("Dev");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

@@ -31,11 +31,25 @@ namespace TypicalSchoolWebsite_FileStorageService
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TypicalSchoolWebsite_FileStorageService", Version = "v1" });
             });
+
+            //CORS
+            services.AddCors(options =>
+            {
+                options.AddPolicy("Dev", builder =>
+                {
+                    builder.AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .WithOrigins("*");
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //UseCORS
+            app.UseCors("Dev");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
