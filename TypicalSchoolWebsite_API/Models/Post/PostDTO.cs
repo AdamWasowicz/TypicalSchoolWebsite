@@ -18,6 +18,8 @@ namespace TypicalSchoolWebsite_API.Models.Post
 
         public DateTime LastEditDate { get; set; }
 
+        public string ImageStorageName { get; set; }
+
         public UserDTO User { get; set; }
 
         public bool IsActive { get; set; }

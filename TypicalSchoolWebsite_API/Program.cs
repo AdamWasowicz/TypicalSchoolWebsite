@@ -18,12 +18,12 @@ namespace TypicalSchoolWebsite_API
         {
             var host = CreateHostBuilder(args).Build();
 
-            using (var scope = host.Services.CreateScope())
-            {
-                var db = scope.ServiceProvider.GetRequiredService<TSW_DbContext>();
-                if (db.Database.CanConnect())
-                    db.Database.Migrate();
-            }
+            //using (var scope = host.Services.CreateScope())
+            //{
+            //    var db = scope.ServiceProvider.GetRequiredService<TSW_DbContext>();
+            //    if (db.Database.CanConnect())
+            //        db.Database.Migrate();
+            //}
 
             host.Run();
         }

@@ -16,11 +16,15 @@ namespace TypicalSchoolWebsite_API.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
+        private readonly IImageFileService _imageFileService;   
 
 
-        public AccountController(IAccountService accountService)
+        public AccountController(
+            IAccountService accountService,
+            IImageFileService imageFileService)
         {
             _accountService = accountService;
+            _imageFileService = imageFileService;
         }
 
 

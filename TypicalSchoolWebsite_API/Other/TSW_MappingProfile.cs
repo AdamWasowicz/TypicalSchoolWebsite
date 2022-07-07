@@ -21,7 +21,9 @@ namespace TypicalSchoolWebsite_API
 
 
             //Post
-            CreateMap<Post, PostDTO>();
+            CreateMap<Post, PostDTO>()
+                .ForMember(m => m.ImageStorageName, c => c.MapFrom(s => s.ImageFile.StorageName));
+            
             CreateMap<CreatePostDTO, Post>();
             CreateMap<EditPostDTO, Post>();
 

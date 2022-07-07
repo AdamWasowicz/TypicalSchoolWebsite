@@ -13,9 +13,7 @@ namespace TypicalSchoolWebsite_API.Entities
 
         public string StorageName { get; set; }
 
-        public string FileFormat { get; set; }
-
-        public int FileSizeInKB { get; set; }
+        public long FileSize { get; set; }
 
         public DateTime WhenCreated { get; set; }
 

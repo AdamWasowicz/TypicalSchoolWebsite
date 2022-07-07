@@ -39,7 +39,8 @@ services:
       #Other
       ASPNETCORE_URLS: http://+:${API_PORT_INSIDE}
       #Services
-      FILESTORAGESERVICE_URL: TypicalSchoolWebiste_FileStorageService:${FILESTORAGESERVICE_PORT_INSIDE}
+      FILESTORAGESERVICE_URL: http://TypicalSchoolWebiste_FileStorageService:${FILESTORAGESERVICE_PORT_INSIDE}
+      MODE: Production
     networks:
       - backendNetwork
     depends_on:
@@ -62,7 +63,7 @@ services:
     networks:
       - backendNetwork
     volumes:
-      - TSW_fileStorageServiceVolume:/app/Storage/Images
+      - TSW-fileStorageServiceVolume:/app/FileStorage/Images
 
       
   database:
@@ -82,7 +83,7 @@ services:
         
 volumes:
     db-volume:
-    TSW_fileStorageServiceVolume:
+    TSW-fileStorageServiceVolume:
 
 networks:
     frontendNetwork:

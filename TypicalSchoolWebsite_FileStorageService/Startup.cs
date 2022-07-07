@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TypicalSchoolWebsite_FileStorageService.Interfaces;
+using TypicalSchoolWebsite_FileStorageService.Services;
 
 namespace TypicalSchoolWebsite_FileStorageService
 {
@@ -25,6 +27,9 @@ namespace TypicalSchoolWebsite_FileStorageService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Add services
+            services.AddScoped<IFileStorageService, FileStorageService>();
+
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

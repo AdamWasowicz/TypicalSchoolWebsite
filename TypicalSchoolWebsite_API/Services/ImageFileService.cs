@@ -42,39 +42,56 @@ namespace TypicalSchoolWebsite_API.Services
         public async Task<string> CreateImage(CreateImageFileDTO dto)
         {
             var url = Environment.GetEnvironmentVariable("FILESTORAGESERVICE_URL");
-            if (url == null)
-                url = "http://localhost:8001";
+            if (url == null || url == "")
+                //url = "http://localhost:29439";           //DEFAULT NO CONTAINER
+            url = "http://localhost:8001";                  //DEFAULT CONTAINER
+
             var route = "fileStorage/createImageFile";
-            _httpClient.BaseAddress = new Uri(url);
+            //_httpClient.BaseAddress = new Uri(url);
             var file = dto.File;
 
             byte[] data;
             using (var br = new BinaryReader(file.OpenReadStream()))
                 data = br.ReadBytes((int)file.OpenReadStream().Length);
-
             ByteArrayContent bytes = new ByteArrayContent(data);
 
 
             MultipartFormDataContent multiContent = new MultipartFormDataContent();
-
             multiContent.Add(bytes, "file", file.FileName);
 
 
-
-
             //Send
-            var httpResponse = await _httpClient.PostAsync(route, multiContent);
+            var httpResponse = await _httpClient.PostAsync(url + "/" + route, multiContent);
 
             if (httpResponse.IsSuccessStatusCode)
             {
                 var respone = await httpResponse.Content.ReadAsStringAsync();
+
                 if (respone != null)
                     return respone;
                 else
-                    return "No response";
+                    return "";
             }
             else
-                return "error";
+                return "";
+        }
+
+
+        public async Task<Tuple<byte[], string>> GetImage(string storageName)
+        {
+            var url = Environment.GetEnvironmentVariable("FILESTORAGESERVICE_URL");
+            if (url == null)
+                url = "http://localhost:29439";               //DEFAULT NO CONTAINER
+                //url = "http://localhost:8001";                  //DEFAULT CONTAINER
+            var route = $"/fileStorage/getImageFile/{storageName}";
+
+            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, url + route);
+
+            var httpResponse = await _httpClient.SendAsync(httpRequestMessage);
+
+            var content = httpResponse.Content;
+            var contentStream = await content.ReadAsByteArrayAsync();
+            return new Tuple<byte[], string>(contentStream, storageName);
         }
 
 
@@ -83,7 +100,8 @@ namespace TypicalSchoolWebsite_API.Services
         {
             var url = Environment.GetEnvironmentVariable("FILESTORAGESERVICE_URL");
             if (url == null)
-                url = "http://localhost:8001";
+                //url = "http://localhost:29439";               //DEFAULT NO CONTAINER
+                url = "http://localhost:8001";                  //DEFAULT CONTAINER
             var route = "/fileStorage/testConnection";
 
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, url + route);

@@ -73,9 +73,24 @@ namespace TypicalSchoolWebsite_API.Services
             fileServiceDTO.FileName = dto.PostImage.FileName;
             fileServiceDTO.FileExtenstion = dto.PostImage.FileName.Split('.')[1];
 
+
+            //fileService
             var fileServiceResult = await _imageFileService.CreateImage(fileServiceDTO);
+            ImageFile imageFile = new ImageFile()
+            {
+                UserGivenName = dto.PostImage.FileName,
+                StorageName = fileServiceResult,
+                FileSize = dto.PostImage.Length,
+                WhenCreated = DateTime.Now,
+
+                UserId = userId
+            };
+            _dbContext.ImageFiles.Add(imageFile);
+            _dbContext.SaveChanges();
 
 
+            //Save Post
+            newPost.ImageFileId = imageFile.Id;
             _dbContext.Posts.Add(newPost);
             _dbContext.SaveChanges();
 
@@ -88,7 +103,8 @@ namespace TypicalSchoolWebsite_API.Services
             var posts = _dbContext.Posts
                 .Include(p => p.User)
                     .Include(p => p.User.Role)
-                    .ToList();
+                    .Include(p => p.ImageFile)
+                        .ToList();
 
             if (posts.Count == 0)
                 throw new NotFoundException("No resources found");
@@ -104,6 +120,7 @@ namespace TypicalSchoolWebsite_API.Services
         {
             var post = _dbContext.Posts
                 .Where(p => p.Id == id)
+                    .Include(p => p.ImageFile)
                     .FirstOrDefault();
 
 
