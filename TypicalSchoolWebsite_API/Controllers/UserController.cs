@@ -79,7 +79,7 @@ namespace TypicalSchoolWebsite_API.Controllers
         }
 
 
-        [HttpPut("editUser")]
+        [HttpPut("editUserById")]
         [Authorize(Policy = "IsWriter")]
         public ActionResult<UserDTO> EditUserById([FromBody] EditUserDTO dto)
         {
@@ -89,7 +89,7 @@ namespace TypicalSchoolWebsite_API.Controllers
         }
 
 
-        [HttpPut("editUser")]
+        [HttpPut("editUserByUserName")]
         [Authorize(Policy = "IsWriter")]
         public ActionResult<UserDTO> EditUserByUserName([FromBody] EditUserDTO dto)
         {
