@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using TypicalSchoolWebsite_API.Models.Post;
@@ -9,10 +7,13 @@ namespace TypicalSchoolWebsite_API.Interfaces
 {
     public interface IPostService
     {
-        public Task<int> CreatePost(CreatePostDTO dto, ClaimsPrincipal userClaims);
-        public List<PostDTO> GetAllPosts();
-        public PostDTO GetPostById(int id);
-        public int DeletePostById(int id, ClaimsPrincipal userClaims);
-        public PostDTO EditPostById(EditPostDTO dto, ClaimsPrincipal userClaims);
+        Task<int> CreatePost(CreatePostDTO dto, ClaimsPrincipal userClaims);
+        int DeletePostByAccessName(string accessName, ClaimsPrincipal userClaims);
+        int DeletePostById(int id, ClaimsPrincipal userClaims);
+        PostDTO EditPostByAccessName(EditPostDTO dto, ClaimsPrincipal userClaims);
+        PostDTO EditPostById(EditPostDTO dto, ClaimsPrincipal userClaims);
+        List<PostDTO> GetAllPosts();
+        PostDTO GetPostByAccessName(string accessName);
+        PostDTO GetPostById(int id);
     }
 }

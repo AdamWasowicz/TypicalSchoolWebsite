@@ -33,24 +33,7 @@ namespace TypicalSchoolWebsite_API.Services
         }
 
 
-        //GetAllUsers
-        public List<UserDTO> GetAllUsers()
-        {
-            var users = _dbContext.Users
-                .Include(r => r.Role)
-                    .ToList();
-
-            if (users.Count == 0)
-                throw new NotFoundException("No records found");
-
-            var usersDTO = _mapper.Map<List<UserDTO>>(users);
-
-            return usersDTO;
-        }
-
-
-        //GetUserById
-        public UserDTO GetUserById(int id)
+        private User GetUserEntityById(int id)
         {
             var user = _dbContext.Users
                 .Where(u => u.Id == id)
@@ -59,22 +42,23 @@ namespace TypicalSchoolWebsite_API.Services
             if (user == null)
                 throw new NotFoundException();
 
-            var userDTO = _mapper.Map<UserDTO>(user);
-            return userDTO;
+            return user;
         }
 
-
-        //DeleteUserById
-        public int DeleteUserById(int id, ClaimsPrincipal userClaims)
+        private User GetUserEntityByUserName(string userName)
         {
             var user = _dbContext.Users
-                .Where(u => u.Id == id)
+                .Where(u => u.UserName == userName)
                     .FirstOrDefault();
 
             if (user == null)
                 throw new NotFoundException();
 
+            return user;
+        }
 
+        private int DeleteUser(User user, ClaimsPrincipal userClaims)
+        {
             //Authorization
             var authorizationResult = _authorizationService.AuthorizeAsync(userClaims, user,
                 new ResourceOperationRequirement(ResourceOperation.Delete));
@@ -88,7 +72,7 @@ namespace TypicalSchoolWebsite_API.Services
 
             //Check if deleted
             var deleted = _dbContext.Users
-                .Where(p => p.Id == id)
+                .Where(p => p.Id == user.Id)
                     .Any();
 
             if (!deleted)
@@ -98,15 +82,8 @@ namespace TypicalSchoolWebsite_API.Services
             return 0;
         }
 
-
-        //EditUserById
-        public UserDTO EditUserById(EditUserDTO dto, ClaimsPrincipal userClaims)
+        private UserDTO EditUser(User user, EditUserDTO dto, ClaimsPrincipal userClaims)
         {
-            var user = _dbContext.Users
-                .Where(u => u.Id == dto.Id)
-                    .FirstOrDefault();
-
-
             //Authorization
             var authorizationResult = _authorizationService.AuthorizeAsync(userClaims, user,
                 new ResourceOperationRequirement(ResourceOperation.Update));
@@ -126,6 +103,72 @@ namespace TypicalSchoolWebsite_API.Services
 
             var userDTO = _mapper.Map<UserDTO>(user);
             return userDTO;
+        }
+
+
+
+        public List<UserDTO> GetAllUsers()
+        {
+            var users = _dbContext.Users
+                .Include(r => r.Role)
+                    .ToList();
+
+            if (users.Count == 0)
+                throw new NotFoundException("No records found");
+
+            var usersDTO = _mapper.Map<List<UserDTO>>(users);
+
+            return usersDTO;
+        }
+
+
+        public UserDTO GetUserById(int id)
+        {
+            var user = GetUserEntityById(id);
+
+            var userDTO = _mapper.Map<UserDTO>(user);
+            return userDTO;
+        }
+
+
+        public UserDTO GetUserByUserName(string userName)
+        {
+            var user = GetUserEntityByUserName(userName);
+
+            var userDTO = _mapper.Map<UserDTO>(user);
+            return userDTO;
+        }
+
+
+        public int DeleteUserById(int id, ClaimsPrincipal userClaims)
+        {
+            var user = GetUserEntityById(id);
+
+            return DeleteUser(user, userClaims);
+        }
+
+
+        public int DeleteUserByUserName(string userName, ClaimsPrincipal userClaims)
+        {
+            var user = GetUserEntityByUserName(userName);
+
+            return DeleteUser(user, userClaims);
+        }
+
+
+        public UserDTO EditUserById(EditUserDTO dto, ClaimsPrincipal userClaims)
+        {
+            var user = GetUserEntityById(dto.Id);
+
+            return EditUser(user, dto, userClaims);
+        }
+
+
+        public UserDTO EditUserByUserName(EditUserDTO dto, ClaimsPrincipal userClaims)
+        {
+            var user = GetUserEntityByUserName(dto.UserName);
+
+            return EditUser(user, dto, userClaims);
         }
     }
 }

@@ -13,6 +13,7 @@ using TypicalSchoolWebsite_API.Interfaces;
 using TypicalSchoolWebsite_API.Models.ImageFile;
 using TypicalSchoolWebsite_API.Models.Post;
 using TypicalSchoolWebsite_API.Models.PostLog;
+using XSystem.Security.Cryptography;
 
 namespace TypicalSchoolWebsite_API.Services
 {
@@ -40,106 +41,42 @@ namespace TypicalSchoolWebsite_API.Services
         }
 
 
-        public async Task<int> CreatePost(CreatePostDTO dto, ClaimsPrincipal userClaims)
+        private string HashName(string toBeHashedString)
         {
-            //Authorization
-            var authorizationResult = _authorizationService.AuthorizeAsync(userClaims, null,
-                new ResourceOperationRequirement(ResourceOperation.Create));
-            if (!authorizationResult.IsCompletedSuccessfully)
-                throw new BadAuthorizationExeption();
-
-
-            int userId = Convert.ToInt32(userClaims.FindFirst(c => c.Type == "UserId").Value);
-            var timestamp = DateTime.Now;
-
-
-            var newPost = new Post()
+            using (var sha = new SHA256Managed())
             {
-                Title = dto.Title,
-                TextContent = dto.TextContent,
-
-                CreationDate = timestamp,
-                LastEditDate = timestamp,
-
-                IsActive = true,
-
-                UserId = userId,
-            };
-
-
-            //FileService
-            var fileServiceDTO = new CreateImageFileDTO();
-            fileServiceDTO.File = dto.PostImage;
-            fileServiceDTO.FileName = dto.PostImage.FileName;
-            fileServiceDTO.FileExtenstion = dto.PostImage.FileName.Split('.')[1];
-
-
-            //fileService
-            var fileServiceResult = await _imageFileService.CreateImage(fileServiceDTO);
-            ImageFile imageFile = new ImageFile()
-            {
-                UserGivenName = dto.PostImage.FileName,
-                StorageName = fileServiceResult,
-                FileSize = dto.PostImage.Length,
-                WhenCreated = DateTime.Now,
-
-                UserId = userId
-            };
-            _dbContext.ImageFiles.Add(imageFile);
-            _dbContext.SaveChanges();
-
-
-            //Save Post
-            newPost.ImageFileId = imageFile.Id;
-            _dbContext.Posts.Add(newPost);
-            _dbContext.SaveChanges();
-
-            return newPost.Id;
-        }
-    
-
-        public List<PostDTO> GetAllPosts()
-        {
-            var posts = _dbContext.Posts
-                .Include(p => p.User)
-                    .Include(p => p.User.Role)
-                    .Include(p => p.ImageFile)
-                        .ToList();
-
-            if (posts.Count == 0)
-                throw new NotFoundException("No resources found");
-
-
-            var postsDTO = _mapper.Map<List<PostDTO>>(posts);
-
-            return postsDTO;
+                byte[] textData = System.Text.Encoding.UTF8.GetBytes(toBeHashedString);
+                byte[] hash = sha.ComputeHash(textData);
+                return BitConverter.ToString(hash).Replace("-", String.Empty);
+            }
         }
 
-
-        public PostDTO GetPostById(int id)
+        private Post GetPostEntityByAccessName(string accessName)
         {
             var post = _dbContext.Posts
-                .Where(p => p.Id == id)
+                .Where(p => p.AccessName == accessName)
                     .Include(p => p.ImageFile)
-                    .FirstOrDefault();
-
+                        .FirstOrDefault();
 
             if (post == null)
                 throw new NotFoundException("No resource found");
 
-
-            var postDTO = _mapper.Map<PostDTO>(post);
-            return postDTO;
+            return post;
         }
-
-
-        public int DeletePostById(int id, ClaimsPrincipal userClaims)
+        private Post GetPostEntityById(int id)
         {
             var post = _dbContext.Posts
                 .Where(p => p.Id == id)
-                    .FirstOrDefault();
+                    .Include(p => p.ImageFile)
+                        .FirstOrDefault();
 
+            if (post == null)
+                throw new NotFoundException("No resource found");
 
+            return post;
+        }
+        private int DeletePost(Post post, ClaimsPrincipal userClaims)
+        {
             //PostLog
             var createPostLogDTO = new CreatePostLogDTO();
             createPostLogDTO.PreviousState = _mapper.Map<PostDTO>(post);
@@ -169,15 +106,8 @@ namespace TypicalSchoolWebsite_API.Services
 
             return 0;
         }
-
-
-        public PostDTO EditPostById(EditPostDTO dto, ClaimsPrincipal userClaims)
+        private PostDTO EditPost(Post post, EditPostDTO dto, ClaimsPrincipal userClaims)
         {
-            var post = _dbContext.Posts
-                .Where(p => p.Id == dto.Id)
-                    .FirstOrDefault();
-
-
             //PostLog
             var createPostLogDTO = new CreatePostLogDTO();
             createPostLogDTO.PreviousState = _mapper.Map<PostDTO>(post);
@@ -219,6 +149,132 @@ namespace TypicalSchoolWebsite_API.Services
 
             var postDTO = _mapper.Map<PostDTO>(post);
             return postDTO;
+        }
+        public async Task<int> CreatePost(CreatePostDTO dto, ClaimsPrincipal userClaims)
+        {
+            //Authorization
+            var authorizationResult = _authorizationService.AuthorizeAsync(userClaims, null,
+                new ResourceOperationRequirement(ResourceOperation.Create));
+            if (!authorizationResult.IsCompletedSuccessfully)
+                throw new BadAuthorizationExeption();
+
+
+            int userId = Convert.ToInt32(userClaims.FindFirst(c => c.Type == "UserId").Value);
+            var timestamp = DateTime.Now;
+
+
+            var newPost = new Post()
+            {
+                Title = dto.Title,
+                TextContent = dto.TextContent,
+
+                AccessName = HashName(dto.Title + DateTime.Now),
+
+                CreationDate = timestamp,
+                LastEditDate = timestamp,
+
+                IsActive = true,
+
+                UserId = userId,
+            };
+
+
+            //FileService
+            var fileServiceDTO = new CreateImageFileDTO();
+            fileServiceDTO.File = dto.PostImage;
+            fileServiceDTO.FileName = dto.PostImage.FileName;
+            fileServiceDTO.FileExtenstion = dto.PostImage.FileName.Split('.')[1];
+
+
+            //fileService
+            var fileServiceResult = await _imageFileService.CreateImage(fileServiceDTO);
+            ImageFile imageFile = new ImageFile()
+            {
+                UserGivenName = dto.PostImage.FileName,
+                StorageName = fileServiceResult,
+                FileSize = dto.PostImage.Length,
+                WhenCreated = DateTime.Now,
+
+                UserId = userId
+            };
+            _dbContext.ImageFiles.Add(imageFile);
+            _dbContext.SaveChanges();
+
+
+            //Save Post
+            newPost.ImageFileId = imageFile.Id;
+            _dbContext.Posts.Add(newPost);
+            _dbContext.SaveChanges();
+
+            return newPost.Id;
+        }
+
+
+        public List<PostDTO> GetAllPosts()
+        {
+            var posts = _dbContext.Posts
+                .Include(p => p.User)
+                    .Include(p => p.User.Role)
+                    .Include(p => p.ImageFile)
+                        .ToList();
+
+            if (posts.Count == 0)
+                throw new NotFoundException("No resources found");
+
+
+            var postsDTO = _mapper.Map<List<PostDTO>>(posts);
+
+            return postsDTO;
+        }
+
+
+        public PostDTO GetPostById(int id)
+        {
+            var post = GetPostEntityById(id);
+
+            var postDTO = _mapper.Map<PostDTO>(post);
+            return postDTO;
+        }
+
+
+        public PostDTO GetPostByAccessName(string accessName)
+        {
+            var post = GetPostEntityByAccessName(accessName);
+
+            var postDTO = _mapper.Map<PostDTO>(post);
+            return postDTO;
+        }
+
+
+        public int DeletePostById(int id, ClaimsPrincipal userClaims)
+        {
+            var post = GetPostEntityById(id);
+
+            return DeletePost(post, userClaims);
+        }
+
+
+        public int DeletePostByAccessName(string accessName, ClaimsPrincipal userClaims)
+        {
+            var post = GetPostEntityByAccessName(accessName);
+
+            return DeletePost(post, userClaims);
+        }
+
+
+        public PostDTO EditPostById(EditPostDTO dto, ClaimsPrincipal userClaims)
+        {
+            var post = GetPostEntityById(dto.Id);
+
+            return EditPost(post, dto, userClaims);
+        }
+
+
+        public PostDTO EditPostByAccessName(EditPostDTO dto, ClaimsPrincipal userClaims)
+        {
+            var post = GetPostEntityByAccessName(dto.AccessName);
+
+            return EditPost(post, dto, userClaims);
         }
     }
 }

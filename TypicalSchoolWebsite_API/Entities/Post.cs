@@ -14,6 +14,8 @@ namespace TypicalSchoolWebsite_API.Entities
 
         public string Title { get; set; }
 
+        public string AccessName { get; set; }
+
         public string TextContent { get; set; }
 
         public DateTime CreationDate { get; set; }

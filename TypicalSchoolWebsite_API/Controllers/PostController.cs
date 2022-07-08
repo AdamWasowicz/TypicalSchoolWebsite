@@ -1,14 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using TypicalSchoolWebsite_API.Entities;
 using TypicalSchoolWebsite_API.Interfaces;
 using TypicalSchoolWebsite_API.Models.Post;
+
 
 namespace TypicalSchoolWebsite_API.Controllers
 {
@@ -53,6 +49,15 @@ namespace TypicalSchoolWebsite_API.Controllers
         }
 
 
+        [HttpGet("getPostByAccessName/{accessName}")]
+        public ActionResult<PostDTO> GetPostById([FromRoute] string accessName)
+        {
+            var postDTO = _postService.GetPostByAccessName(accessName);
+
+            return Ok(postDTO);
+        }
+
+
         [HttpDelete("deletePostById/{id}")]
         [Authorize(Policy = "IsWriter")]
         public ActionResult DeletePostById([FromRoute] int id)
@@ -66,9 +71,32 @@ namespace TypicalSchoolWebsite_API.Controllers
         }
 
 
-        [HttpPut("editPost")]
+        [HttpDelete("deletePostByAccessName/{accessName}")]
         [Authorize(Policy = "IsWriter")]
-        public ActionResult<PostDTO> EditPost([FromBody] EditPostDTO dto)
+        public ActionResult DeletePostById([FromRoute] string accessName)
+        {
+            var result = _postService.DeletePostByAccessName(accessName, User);
+
+            if (result != 0)
+                return StatusCode(500);
+
+            return NoContent();
+        }
+
+
+        [HttpPut("editPostById")]
+        [Authorize(Policy = "IsWriter")]
+        public ActionResult<PostDTO> EditPostById([FromBody] EditPostDTO dto)
+        {
+            var postDTO = _postService.EditPostById(dto, User);
+
+            return Ok(postDTO);
+        }
+
+
+        [HttpPut("editPostByAccessName")]
+        [Authorize(Policy = "IsWriter")]
+        public ActionResult<PostDTO> EditPostByAccessName([FromBody] EditPostDTO dto)
         {
             var postDTO = _postService.EditPostById(dto, User);
 

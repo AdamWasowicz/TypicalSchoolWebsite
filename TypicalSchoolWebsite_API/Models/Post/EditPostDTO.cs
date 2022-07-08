@@ -9,6 +9,8 @@ namespace TypicalSchoolWebsite_API.Models.Post
     {
         public int Id { get; set; }
 
+        public string AccessName { get; set; }
+
         public string Title { get; set; }
 
         public string TextContent { get; set; }
