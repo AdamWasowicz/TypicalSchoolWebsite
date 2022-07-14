@@ -15,5 +15,6 @@ namespace TypicalSchoolWebsite_API.Interfaces
         List<PostDTO> GetAllPosts();
         PostDTO GetPostByAccessName(string accessName);
         PostDTO GetPostById(int id);
+        PostQueryResultDTO GetPostsUsingQuery(PostQueryDTO dto);
     }
 }

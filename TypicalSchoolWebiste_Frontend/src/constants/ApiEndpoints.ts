@@ -1,0 +1,1 @@
+export const getPostsUsingQueryEndpoint : string = '/api/post/getPosts/query';

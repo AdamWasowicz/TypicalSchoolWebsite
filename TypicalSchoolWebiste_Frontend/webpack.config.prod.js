@@ -1,5 +1,9 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { EnvironmentPlugin } = require('webpack');
+
+console.log(process.env);
+console.log(process.env.REACT_APP_APIURL);
 
 module.exports = {
   entry: './src/index.tsx',
@@ -60,5 +64,11 @@ module.exports = {
       template: './src/index.html',
     }),
 
+    new EnvironmentPlugin({
+      'process.env.REACT_APP_API_URL': process.env.REACT_APP_API_URL != null
+      ? process.env.REACT_APP_API_URL : 'localhost:80',
+      REACT_APP_API_URL: process.env.REACT_APP_API_URL != null
+      ? process.env.REACT_APP_API_URL : 'localhost:80',
+    })
   ],
 };

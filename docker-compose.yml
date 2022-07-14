@@ -7,8 +7,9 @@ services:
     build: 
       context: './TypicalSchoolWebiste_Frontend'
       dockerfile: Dockerfile
-    environment:
-      REACT_APP_API_URL: http://localhost:${API_PORT_INSIDE}
+      args:
+        #REACT_APP_API_URL: "http://localhost:${API_PORT_OUTSIDE}"  #container
+        REACT_APP_API_URL: "http://localhost:80"                    #local
     ports:
       - "3000:80"
     volumes:

@@ -34,6 +34,7 @@ using TypicalSchoolWebsite_API.Models.Role;
 using TypicalSchoolWebsite_API.Validation.Role;
 using TypicalSchoolWebsite_API.Models.User;
 using TypicalSchoolWebsite_API.Validation.User;
+using Microsoft.AspNetCore.Cors;
 
 namespace TypicalSchoolWebsite_API
 {
@@ -188,15 +189,12 @@ namespace TypicalSchoolWebsite_API
             });
 
             //CORS
-            services.AddCors(options =>
+            services.AddCors(o => o.AddPolicy("Dev", builder =>
             {
-                options.AddPolicy("Dev", builder =>
-                {
-                    builder.AllowAnyMethod()
-                        .AllowAnyHeader()
-                        .WithOrigins("*");
-                });
-            });
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
         }
 
 
@@ -208,6 +206,7 @@ namespace TypicalSchoolWebsite_API
         {
             //UseCORS
             app.UseCors("Dev");
+
 
             if (env.IsDevelopment())
             {
@@ -225,6 +224,7 @@ namespace TypicalSchoolWebsite_API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
 
             //Use Authorization
             app.UseAuthorization();

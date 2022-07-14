@@ -1,7 +1,11 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { EnvironmentPlugin } = require('webpack');
 
-module.exports = {
+
+module.exports = () => {
+
+  return {
   entry: './src/index.tsx',
 
   devServer: {
@@ -9,8 +13,15 @@ module.exports = {
     hot: true,
     
     historyApiFallback: true,
-    port: 3000,
+    port: 8888,
     open: true,
+
+
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+      "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
+    },
   },
 
   mode: 'development',
@@ -54,5 +65,13 @@ module.exports = {
       title: 'Development',
       template: './src/index.html',
     }),
+
+    new EnvironmentPlugin({
+      'process.env.REACT_APP_API_URL': process.env.REACT_APP_API_URL != null
+      ? process.env.REACT_APP_API_URL : 'localhost:80',
+      REACT_APP_API_URL: process.env.REACT_APP_API_URL != null
+      ? process.env.REACT_APP_API_URL : 'localhost:80',
+    })
   ],
+}
 };

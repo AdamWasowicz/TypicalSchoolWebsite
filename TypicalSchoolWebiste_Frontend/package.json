@@ -4,9 +4,10 @@
   "description": "trying new things",
   "main": "app.js",
   "scripts": {
+    "start": "webpack-dev-server --mode=development",
     "test": "echo \"Error: no test specified\" && exit 1",
     "startDev": "webpack-dev-server",
-    "build": "webpack --config webpack.config.prod.js"
+    "buildWebpack": "webpack --config webpack.config.prod.js"
   },
   "author": "Adam Wąsowicz",
   "license": "MIT",
@@ -29,6 +30,7 @@
     "axios": "^0.26.1",
     "babel-plugin-macros": "^3.1.0",
     "css-loader": "^6.7.1",
+    "dotenv-webpack": "^8.0.0",
     "eslint": "^8.13.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-react": "^7.29.4",

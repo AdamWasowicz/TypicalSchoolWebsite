@@ -9,7 +9,7 @@ using TypicalSchoolWebsite_API.Models.Post;
 namespace TypicalSchoolWebsite_API.Controllers
 {
     [ApiController]
-    [Route("post")]
+    [Route("api/post")]
     public class PostController : ControllerBase
     {
         private readonly IPostService _postService;
@@ -55,6 +55,15 @@ namespace TypicalSchoolWebsite_API.Controllers
             var postDTO = _postService.GetPostByAccessName(accessName);
 
             return Ok(postDTO);
+        }
+
+
+        [HttpPost("getPosts/query")]
+        public ActionResult<PostQueryResultDTO> GetPostsUsingQuery([FromBody] PostQueryDTO dto)
+        {
+            var result = _postService.GetPostsUsingQuery(dto);
+
+            return Ok(result);
         }
 
 

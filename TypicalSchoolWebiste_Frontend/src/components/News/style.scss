@@ -5,7 +5,7 @@
 
 .News {
     //Content position
-    padding: 5px;
+    //padding: 5px;
 
 
     //NewsHealder
@@ -33,6 +33,42 @@
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
+    }
+
+
+    //PageSelectorContainer
+    > * ~ .PageSelectorContainer {
+        //Object size
+        width: 100%;
+
+
+        //Object content
+        text-align: center;
+
+
+        //Border
+        border-bottom: 2px solid black;
+        border-top: 2px solid black;
+        background-color: $primary-dark;
+
+
+        //page
+        .page {
+            //Color
+            color: white;//$primary-text;
+
+            
+            //Object position
+            margin-right: 20px;
+        }
+
         
+        //page-current
+        a.page-current{
+            @extend .page;
+
+            //Color
+            color: red;//$secondary-base;
+        }
     }
 }

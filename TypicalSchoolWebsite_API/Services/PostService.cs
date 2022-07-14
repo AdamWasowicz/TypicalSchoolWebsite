@@ -246,6 +246,45 @@ namespace TypicalSchoolWebsite_API.Services
         }
 
 
+        public PostQueryResultDTO GetPostsUsingQuery(PostQueryDTO dto)
+        {
+            var posts = _dbContext.Posts
+                .Include(p => p.User)
+                    .Include(p => p.User.Role)
+                    .Include(p => p.ImageFile)
+                        .ToList();
+
+
+            //Sort
+            posts.OrderBy(p => p.CreationDate);
+
+
+            var retPosts = posts
+                .Skip(dto.DesiredNumberOfItems * (dto.DesiredPage))
+                    .Take(dto.DesiredNumberOfItems)
+                        .ToList();
+
+            if (retPosts.Count == 0)
+                throw new NotFoundException();
+
+            var postsDTO = _mapper.Map<List<PostDTO>>(retPosts);
+
+
+
+            var maxPages = Convert.ToDouble(posts.Count() / dto.DesiredNumberOfItems);
+            var returnDTO = new PostQueryResultDTO()
+            {
+                Posts = postsDTO,
+                DesiredPage = dto.DesiredPage,
+                DesiredNumberOfItems = dto.DesiredNumberOfItems,
+                MaxPages = Convert.ToInt32(Math.Ceiling(maxPages))
+            };
+
+
+            return returnDTO;
+        }
+
+
         public int DeletePostById(int id, ClaimsPrincipal userClaims)
         {
             var post = GetPostEntityById(id);
