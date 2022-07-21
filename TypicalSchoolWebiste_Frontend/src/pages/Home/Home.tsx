@@ -1,12 +1,10 @@
 import React from 'react';
 
-
 //Style
 import './style.scss';
 
-
 //Components
-import News from '../../components/News';
+import NewsList from '../../components/NewsList';
 
 
 const Home: React.FunctionComponent = () => {
@@ -15,8 +13,7 @@ const Home: React.FunctionComponent = () => {
     return (
         <div className='Home'>
             <div className='HomeContent'>
-                
-                <News/>
+                <NewsList/>
             </div>
         </div>
     );

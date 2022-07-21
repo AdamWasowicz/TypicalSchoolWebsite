@@ -16,7 +16,7 @@ const maxPageNumberSlice = createSlice({
     initialState,
     reducers: {
         setMaxPageNumber(state: MaxPageNumber, action: PayloadAction<number>) {
-            state.value += action.payload
+            state.value = action.payload
         }
     }
 });

@@ -10,7 +10,7 @@ import Error404 from '../../pages/Error404';
 import NavBar from '../NavBar/NavBar';
 
 //Interfaces
-import { IRoute } from '../../types/route';
+import { IRoute } from '../../assets/Interfaces/IRoute';
 
 //Other
 import { routes } from '../../pages/routes';
@@ -31,7 +31,17 @@ const App: React.FunctionComponent = () => {
                                 key={i}
                                 path={route.route}
                                 element={<route.module/>}
-                            />
+                            >
+                                {
+                                    route.subRoutes.map((subRoute: IRoute, d: number) => {
+                                        return <Route
+                                            key={i + "." + d}
+                                            path={subRoute.route}
+                                            element={<subRoute.route/>}
+                                        />
+                                    })
+                                }
+                            </Route>
                         ))
                     }
                 </Routes>

@@ -5,10 +5,8 @@ import { useNavBar } from './utils';
 import './style.scss';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 
-
 //Interfaces
 import INavBarElement from '../../assets/Interfaces/INavBarElement';
-
 
 //Components
 import NavBarElement from './NavBarElement';
@@ -17,8 +15,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const NavBar: React.FunctionComponent<{elements: Array<INavBarElement>}> = ({elements}) => {
     const {navBarVisibility, handleOnClick} = useNavBar();
-
-
 
     return (
         <div className='NavBar'>

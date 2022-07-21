@@ -12,12 +12,19 @@ namespace TypicalSchoolWebsite_API.Validation.Post
 {
     public class CreatePostDTO_Validator : AbstractValidator<CreatePostDTO>
     {
-        public CreatePostDTO_Validator()
+        public CreatePostDTO_Validator(TSW_DbContext dbContext)
         {
             //Title
             RuleFor(x => x.Title)
                 .MinimumLength(Post_ValidationParams.TitleMinLength)
-                .MaximumLength(Post_ValidationParams.TitleMaxLength);
+                .MaximumLength(Post_ValidationParams.TitleMaxLength)
+                .Custom((value, context) =>
+                {
+                    var isTitleInUse = dbContext.Posts.Any(p => p.Title == value);
+
+                    if (isTitleInUse)
+                        context.AddFailure("Title", "Already Exists");
+                });
 
             //TextContent
             RuleFor(x => x.TextContent)

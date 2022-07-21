@@ -1,8 +1,8 @@
 import IPostDTO from "./IPostDTO"
 
 export default interface IPostQueryResult {
-    DesiredPage : number
-    DesiredNumberOfItems : number
-    MaxPages : number
-    Posts : Array<IPostDTO>
+    desiredPage : number
+    desiredNumberOfItems : number
+    maxPages : number
+    posts : Array<IPostDTO>
 }

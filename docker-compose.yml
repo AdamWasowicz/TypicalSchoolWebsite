@@ -9,7 +9,7 @@ services:
       dockerfile: Dockerfile
       args:
         #REACT_APP_API_URL: "http://localhost:${API_PORT_OUTSIDE}"  #container
-        REACT_APP_API_URL: "http://localhost:80"                    #local
+        REACT_APP_API_URL: "http://localhost:8000"                  #local
     ports:
       - "3000:80"
     volumes:
@@ -60,11 +60,10 @@ services:
       - "${FILESTORAGESERVICE_PORT_OUTSIDE}:${FILESTORAGESERVICE_PORT_INSIDE}"
     environment:
       ASPNETCORE_URLS: "http://+:${FILESTORAGESERVICE_PORT_INSIDE}"
-      TEST: "Test"
     networks:
       - backendNetwork
     volumes:
-      - TSW-fileStorageServiceVolume:/app/FileStorage/Images
+      - TSW-FSS-volume:/app/FileStorage/Images
 
       
   database:
@@ -80,11 +79,11 @@ services:
     networks:
       - backendNetwork
     volumes: 
-        - db-volume:/var/lib/postgresql/data
+        - TSW-db-volume:/var/lib/postgresql/data
         
 volumes:
-    db-volume:
-    TSW-fileStorageServiceVolume:
+    TSW-db-volume:
+    TSW-FSS-volume:
 
 networks:
     frontendNetwork:

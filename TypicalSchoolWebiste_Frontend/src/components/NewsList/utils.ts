@@ -1,12 +1,9 @@
 import { useEffect, useState } from 'react';
-import AxiosClient from '../Axios/AxiosClient';
 import axios, { AxiosError } from 'axios';
-
 
 //Interfaces
 import IPostQueryDTO from '../../assets/Interfaces/IPostQueryDTO';
 import IPostQueryResult from '../../assets/Interfaces/IPostQueryResult';
-
 
 //Redux
 import { useAppDispatch, useAppSelector } from '../../redux/hooks'
@@ -14,28 +11,15 @@ import { setPageNumber } from '../../redux/Features/PageNumber-slice';
 import { setPosts } from '../../redux/Features/Posts-slice';
 import { setMaxPageNumber } from '../../redux/Features/MaxPage-slice';
 
-
 //Other
 import { getPostsUsingQueryEndpoint } from '../../constants/ApiEndpoints';
 
 
 export const useNews = () => {
     
-
-    
     const [isLoading, setIsLoading] = useState(false);
     const dispatch = useAppDispatch();
     const currentPage = useAppSelector(state => state.page.value);
-    
-
-    const createArrayInRange = (start: number, end: number, maxNumber: number) => {
-        let array : Array<number> = [];
-
-        for (let i = start ; i < end && i < maxNumber ; i++)
-            array.push(i);
-
-        return array;
-    }
 
 
     const CreatePagesArray = (page: number, maxPage: number) =>
@@ -64,7 +48,6 @@ export const useNews = () => {
 
         return array;
     }
-
 
 
     //Handlers
@@ -100,23 +83,34 @@ export const useNews = () => {
 
         setIsLoading(true);
         let resultDTO : IPostQueryResult;
-        console.log(dto)
+        let url = process.env.REACT_APP_API_URL + getPostsUsingQueryEndpoint
+        console.log(url)
 
 
         await axios({
             method: 'POST',
-            url: `http://localhost:8000` + '/api/post/getPosts/query',
+            url: url,
             data: dto
-        }).then(result => {
-            console.log(result)
-        }).catch((e : AxiosError) => {
-            console.log(e.toJSON());
-            console.log(e.request.response);
-        });
+        })
+        .then(result => {
+
+            resultDTO = result.data;
+
+            dispatch(setPosts(resultDTO.posts));
+            dispatch(setPageNumber(resultDTO.desiredPage));
+            dispatch(setMaxPageNumber(resultDTO.maxPages));
+        })
+        .catch((e : AxiosError) => {
+
+            console.error(e.toJSON());
+            console.error(e.request.response);
+        })
+        .finally(() => {
+
+            setIsLoading(false);
+        })
     }
 
 
-    return {isLoading, createArrayInRange, 
-            handlePageClick, CreatePagesArray,
-            getPostsUsingQuery};
+    return { isLoading, handlePageClick, CreatePagesArray, getPostsUsingQuery };
 }

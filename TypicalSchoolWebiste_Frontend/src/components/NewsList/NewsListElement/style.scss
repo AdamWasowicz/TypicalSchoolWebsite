@@ -14,7 +14,7 @@
     margin: 10px;
 
     //Object size
-    max-width: 600px;
+    max-width: 500px;
     width: 100%;
     height: 110px;
 
@@ -27,7 +27,8 @@
 
     //Border
     border: 1px solid black;
-
+    border-radius: 10px;
+    
 
     //Left Part
     > .LeftPart {
@@ -67,6 +68,8 @@
         > .Title {
             //Text
             font-weight: bold;
+
+            //Content position
 
             //Object position
             margin-bottom: 10px;

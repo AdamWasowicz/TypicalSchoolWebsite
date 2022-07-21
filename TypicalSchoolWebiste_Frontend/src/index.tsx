@@ -10,6 +10,7 @@ import App from './components/App/App';
 const root = document.getElementById('root')! as HTMLElement;
 
 ReactDOM.render(
+  
   <Provider store={store}>
     <App/>
   </Provider>,

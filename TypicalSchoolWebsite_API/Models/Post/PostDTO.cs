@@ -14,6 +14,8 @@ namespace TypicalSchoolWebsite_API.Models.Post
 
         public string TextContent { get; set; }
 
+        public string AccessName { get; set; }
+
         public DateTime CreationDate { get; set; }
 
         public DateTime LastEditDate { get; set; }

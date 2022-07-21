@@ -17,6 +17,7 @@ const postsSlice = createSlice({
     initialState,
     reducers : {
         setPosts(state: Posts, action: PayloadAction<Array<IPostDTO>>) {
+            
             state.value = action.payload
         }
     }

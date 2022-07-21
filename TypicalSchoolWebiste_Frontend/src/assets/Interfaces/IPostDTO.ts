@@ -1,12 +1,15 @@
 import IUserDTO from "./IUserDTO"
 
+
 export default interface IPostDTO {
-    Id : number
-    Title: string
-    TextContent: string
-    CreationDate: Date
-    LastEditDate: Date
-    ImageStorageName: string
-    User: IUserDTO
-    IsActive: boolean
+
+    id : number
+    title: string
+    textContent: string
+    accessName: string
+    creationDate: Date
+    lastEditDate: Date
+    imageStorageName: string
+    user: IUserDTO
+    isActive: boolean
 }

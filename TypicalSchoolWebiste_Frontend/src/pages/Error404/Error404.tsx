@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 //Resources
 import sealImage from './img/seal.jpg';

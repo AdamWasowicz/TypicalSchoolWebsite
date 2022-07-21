@@ -13,7 +13,7 @@ using TypicalSchoolWebsite_API.Interfaces;
 using TypicalSchoolWebsite_API.Models.ImageFile;
 using TypicalSchoolWebsite_API.Models.Post;
 using TypicalSchoolWebsite_API.Models.PostLog;
-using XSystem.Security.Cryptography;
+
 
 namespace TypicalSchoolWebsite_API.Services
 {
@@ -40,16 +40,6 @@ namespace TypicalSchoolWebsite_API.Services
             _imageFileService = imageFileService;
         }
 
-
-        private string HashName(string toBeHashedString)
-        {
-            using (var sha = new SHA256Managed())
-            {
-                byte[] textData = System.Text.Encoding.UTF8.GetBytes(toBeHashedString);
-                byte[] hash = sha.ComputeHash(textData);
-                return BitConverter.ToString(hash).Replace("-", String.Empty);
-            }
-        }
 
         private Post GetPostEntityByAccessName(string accessName)
         {
@@ -168,7 +158,7 @@ namespace TypicalSchoolWebsite_API.Services
                 Title = dto.Title,
                 TextContent = dto.TextContent,
 
-                AccessName = HashName(dto.Title + DateTime.Now),
+                AccessName = dto.Title.Replace("", "-"),
 
                 CreationDate = timestamp,
                 LastEditDate = timestamp,

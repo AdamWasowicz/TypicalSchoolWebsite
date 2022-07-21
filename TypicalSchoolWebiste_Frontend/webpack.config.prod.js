@@ -3,10 +3,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { EnvironmentPlugin } = require('webpack');
 
 console.log(process.env);
-console.log(process.env.REACT_APP_APIURL);
 
 module.exports = {
-  entry: './src/index.tsx',
+
+  entry: '/src/index.tsx',
 
   watchOptions: {
     poll: true
@@ -16,7 +16,6 @@ module.exports = {
     host: '0.0.0.0',
     allowedHosts: 'all',
     hot: true,
-
     historyApiFallback: true,
     port: 3000,
     open: true,
@@ -54,21 +53,21 @@ module.exports = {
 
   output: {
     filename: 'bundle.js',
+    publicPath: '/',
     path: path.resolve(__dirname, 'build'),
     clean: true,
   },
 
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Development',
-      template: './src/index.html',
+      title: 'Production',
+      template: 'src/index.html',
     }),
 
     new EnvironmentPlugin({
-      'process.env.REACT_APP_API_URL': process.env.REACT_APP_API_URL != null
-      ? process.env.REACT_APP_API_URL : 'localhost:80',
+      
       REACT_APP_API_URL: process.env.REACT_APP_API_URL != null
-      ? process.env.REACT_APP_API_URL : 'localhost:80',
+      ? process.env.REACT_APP_API_URL : 'http://localhost:8000',
     })
   ],
 };
