@@ -2,18 +2,18 @@
 
 
 //Constants
-$fade-in-animation-duration: 0.3s;
-$fade-out-animation-duration: 0.3s;
+$fade-in-animation-duration: 0.2s;
+$fade-out-animation-duration: 0.2s;
 
 
 //Keyframes
 @keyframes fadeOutFromRightToLeft {
     0% {
-        margin-left: -100%;
+        margin-left: -120%;
     }
 
     1% {
-        margin-left: -100%;
+        margin-left: -120%;
     }
 
     100% {
@@ -30,7 +30,7 @@ $fade-out-animation-duration: 0.3s;
         margin-left: 0%;
     }
     100% {
-        margin-left: -100%;
+        margin-left: -120%;
     }
 }
 
@@ -58,12 +58,17 @@ $fade-out-animation-duration: 0.3s;
 
 
 .NavBar {
+
     //Color
-    background-color: $primary-dark;
+    background-color: $primary-base;
+    
+    //Shadow
+    box-shadow: 0 4px 2px -2px gray;
 
 
     //barsContainer
     > .barsContainer {
+
         //Object
         display: block;
 
@@ -91,9 +96,12 @@ $fade-out-animation-duration: 0.3s;
         
         //Hover
         &:hover {
-            //Color
-            color: $secondary-dark;
 
+            //Color
+            color: $secondary-base;
+
+            //Cursor
+            cursor: pointer;
 
             //Animation
             transform: rotate(90deg);
@@ -115,7 +123,10 @@ $fade-out-animation-duration: 0.3s;
         z-index: 2;
 
         //Object size
-        width: 100%;
+        width: 400px;
+
+        //Border
+        border-right: 3px solid red;
         
         //Animation
         animation-name: fadeOutFromRightToLeft;
@@ -128,7 +139,7 @@ $fade-out-animation-duration: 0.3s;
             @extend .NavBarElementContainer;
 
             //Object position
-            margin-left: -100%;
+            margin-left: -120%;
 
             //Animation
             animation-name: fadeInFromLeftToRight;

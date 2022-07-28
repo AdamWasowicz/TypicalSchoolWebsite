@@ -1,40 +1,44 @@
 @import '../../../constants/styleConstants.scss';
 
 
-.NavBarElement {
-    //Object
-    box-sizing: border-box;
+    //NavBarElement
+    .NavBarElement {
 
-    //Color
-    background-color: $primary-light;
-    color: white;
-
-    //Object size
-    height: 50px;
-
-    //Border
-    border-bottom: 2px solid $primary-base;
-
-
-    //Hover
-    &:hover {
-        color: $secondary-dark;
-    }
-
-    
-    //NavBarElementContainer
-    > .NavBarElementContainer {
         //Object
         display: flex;
         box-sizing: border-box;
 
         //Object size
-        width: 60%;
+        width: 400px;
         
         //Content position
         flex-direction: row;
         flex-wrap: nowrap;
         padding: 10px;
+
+        //Color
+        background-color: $primary-dark;
+        color: white;
+
+        //Border
+        border-bottom: 3px solid $primary-base;
+        border-right: 2px solid $primary-base;
+
+
+        //Hover
+        &:hover {
+
+            color: $secondary-light;
+            background-color: $primary-light;
+            cursor: pointer;
+        }
+
+         &:active {
+
+            color: $secondary-base;
+            background-color: $primary-light;
+            cursor: pointer;
+        }
 
 
         //NavBarElementIcon
@@ -57,5 +61,3 @@
             font-size: 25px;
         } 
     }
-
-}

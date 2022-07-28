@@ -1,15 +1,15 @@
 @import '../../constants/styleConstants.scss';
 
 
-
-
 .News {
-    //Content position
-    //padding: 5px;
+
+    //Object position
+    margin-top: 20px;
 
 
     //NewsHealder
     > .NewsHeader {
+
         //Text
         font-size: 30px;
         font-weight: bold;
@@ -22,12 +22,14 @@
 
     //NewsElementContainer
     > * ~ .NewsElementContainer {
+
         //Object
         display: flex;
 
         //Object postition
         margin-left: auto;
         margin-right: auto;
+        margin-bottom: 20px;
 
         //Object content
         flex-direction: row;
@@ -38,37 +40,96 @@
 
     //PageSelectorContainer
     > * ~ .PageSelectorContainer {
+
+        //Flexbox
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: center;
+
         //Object size
         width: 100%;
+        min-height: 30px;
 
+        //Content position
+        padding: 12px;
 
         //Object content
         text-align: center;
 
+        //Font
+        font-size: 25px;
+        font-weight: bold;
 
         //Border
-        border-bottom: 2px solid black;
-        border-top: 2px solid black;
-        background-color: $primary-dark;
+        background-color: $primary-base;
 
+        //Shadow
+        box-shadow: 0 4px 2px -2px gray;
 
         //page
         .page {
-            //Color
-            color: white;//$primary-text;
 
-            
+            width: 50px;
+
+            //Other
+            display: block;
+
+            //Color
+            color: white;
+
             //Object position
             margin-right: 20px;
+            margin-left: 20px;
+
+            //Content position
+            padding: 8px;
+
+            //Border
+            border: 3px solid white;
+
+            //Color
+            background-color: $primary-dark;
+
+
+            //Hover
+            &:hover {
+
+                border-color: $secondary-base; 
+                color: $secondary-base;
+                cursor: pointer;
+            }
+
+
+            //Active
+            &:active {
+
+                border-color: $secondary-light; 
+                color: $secondary-light;
+                cursor: pointer;
+            }
         }
 
         
         //page-current
         a.page-current{
+
             @extend .page;
 
+            //Border
+            border-color: $secondary-base;
+
             //Color
-            color: red;//$secondary-base;
+            color: $secondary-base;
+
+
+            //Active
+            &:active {
+
+                border-color: $secondary-light; 
+                color: $secondary-light;
+                cursor: pointer;
+            }
         }
     }
 }

@@ -4,6 +4,7 @@
 
 
 .NewsElement {
+
     //Object
     display: flex;
 
@@ -11,7 +12,7 @@
     overflow: hidden;
 
     //Object position
-    margin: 10px;
+    margin: 12px;
 
     //Object size
     max-width: 500px;
@@ -26,12 +27,15 @@
     flex-wrap: nowrap;
 
     //Border
-    border: 1px solid black;
-    border-radius: 10px;
+    border-radius: 8px 0px 0px 8px;
+
+    //Shadow
+    box-shadow: 0 4px 2px -2px gray;
     
 
     //Left Part
     > .LeftPart {
+
         //Object size
         max-width: 100px;
         height: 100%;
@@ -42,6 +46,7 @@
 
         //NewsImage
         > .NewsImage {
+
             //Object size
             width: 100%;
             height: 100%;
@@ -57,6 +62,7 @@
 
     //Right part
     > * ~ .RightPart {
+
         //Object size
         width: calc(100% - 100px);
 
@@ -66,6 +72,7 @@
 
         //Title
         > .Title {
+
             //Text
             font-weight: bold;
 
@@ -77,6 +84,7 @@
 
         //TextContent
         > * ~ .TextContent {
+            
            //Object content
            //!!!Zrobić w react by samo skaracało tekst i dodawło kropki
            overflow: hidden;

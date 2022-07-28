@@ -14,8 +14,8 @@ const NavBarElement: React.FunctionComponent<{element: INavBarElement}> = ( {ele
 
     
     return (
-        <div className='NavBarElement'>
-            <div className='NavBarElementContainer' onClick={element.onClickHandler}>
+        <div className='NavBarElement' onClick={element.onClickHandler}>
+
                 <div className='NavBarElementIcon'>
                     <FontAwesomeIcon icon={element.iconName} />
                 </div>
@@ -23,7 +23,6 @@ const NavBarElement: React.FunctionComponent<{element: INavBarElement}> = ( {ele
                 <div className='NavBarElementText'>
                     {element.textContent}
                 </div>
-            </div> 
         </div>
     );
 };

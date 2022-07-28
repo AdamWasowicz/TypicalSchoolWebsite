@@ -1,0 +1,59 @@
+@import '../../../constants/styleConstants.scss';
+
+
+.NewsList_NoContentError {
+
+    //Content position
+    text-align: center;
+
+
+    > .NewsList_NoContentError_Container {
+
+        //Object position
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 20px;
+        
+        //Object size
+        min-width: 350px;
+        width: 40%;
+        height: 150px;
+
+        //Border
+        border-radius: 20px;
+
+        //Content position
+        padding: 12px;
+
+        //Color
+        background-color: $primary-dark;
+
+        //Shadow
+        box-shadow: 0 4px 2px -2px gray;
+
+
+        //h4
+        > h4 {
+
+            //Font
+            font-size: 32px;
+            font-weight: bold;
+
+            //Color
+            color: $secondary-base;
+
+            //Object position
+            margin-bottom: 12px;
+        }
+
+
+        > p {
+
+            //Font
+            font-size: 20px;
+
+            //Color
+            color: $secondary-light;
+        }
+    }
+}
